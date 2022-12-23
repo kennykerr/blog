@@ -1,14 +1,14 @@
 {
-  "title": "Kamran Ahmed",
-  "subtitle": "Lead engineer at tradeling — tech guy with an entrepreneurial spirit and knack for getting things done",
+  "title": "Kenny Kerr",
+  "subtitle": "some dude",
   "owner": {
-    "name": "Kamran Ahmed",
-    "email": "kamranahmed.se@gmail.com"
+    "name": "Kenny Kerr",
+    "email": "kenny@kennykerr.ca"
   },
   "social": {
-    "github": "kamranahmedse",
-    "medium": "kamranahmedse",
-    "twitter": "kamranahmedse"
+    "github": "kennykerr",
+    "medium": "kennykerr",
+    "twitter": "kennykerr"
   },
   "newsletter": {
     "showTwitterBanner": true,
@@ -16,14 +16,14 @@
     "revueUsername": "roadmapsh"
   },
   "seo": {
-    "title": "Kamran Ahmed",
-    "description": "Blog of a Software Engineer",
-    "author": "Kamran Ahmed",
+    "title": "Kenny Kerr",
+    "description": "some description",
+    "author": "Kenny Kerr",
     "keywords": [
       "blog",
       "developer blog",
       "engineering blog"
     ]
   },
-  "cname": "kamranahmed.info"
+  "cname": "kennykerr.ca"
 }
