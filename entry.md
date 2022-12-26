@@ -3,5 +3,7 @@
 paragraph
 
 ```rust
-code
+fn main() {
+    let i = 123;
+}
 ```
