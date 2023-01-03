@@ -3,4 +3,4 @@ title = "Kenny Kerr"
 src = "src"
 
 [build]
-build-dir = "pages"
+build-dir = "docs"
