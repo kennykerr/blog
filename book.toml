@@ -1,0 +1,6 @@
+[book]
+title = "Kenny Kerr"
+src = "src"
+
+[build]
+build-dir = "pages"
