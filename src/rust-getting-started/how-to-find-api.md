@@ -1,6 +1,6 @@
 # How do I find a particular API?
 
-First [pick the crate you would like to use](rust-getting-started/windows-or-windows-sys.md). Then search the documentation for the chosen crate:
+First [pick the crate you would like to use](windows-or-windows-sys.md). Then search the documentation for the chosen crate:
 
 - [windows](https://microsoft.github.io/windows-docs-rs/)
 
