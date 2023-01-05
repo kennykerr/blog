@@ -81,7 +81,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="index.html">Introduction</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="index.html">Introduction</a></li><li class="chapter-item expanded affix "><a href="rust-getting-started/index.html">Getting Started with Rust</a></li><li class="chapter-item expanded "><a href="rust-getting-started/windows-or-windows-sys.html"><strong aria-hidden="true">1.</strong> Choosing between the windows and windows-sys crates</a></li><li class="chapter-item expanded "><a href="rust-getting-started/how-are-crates-built.html"><strong aria-hidden="true">2.</strong> How are these crates built?</a></li><li class="chapter-item expanded "><a href="rust-getting-started/how-to-find-api.html"><strong aria-hidden="true">3.</strong> How do I find a particular API?</a></li><li class="chapter-item expanded "><a href="rust-getting-started/what-apis-are-included.html"><strong aria-hidden="true">4.</strong> What APIs are included?</a></li><li class="chapter-item expanded "><a href="rust-getting-started/where-are-the-macros.html"><strong aria-hidden="true">5.</strong> Where's my favorite macro from the Windows SDK?</a></li><li class="chapter-item expanded "><a href="rust-getting-started/calling-your-first-windows-api.html"><strong aria-hidden="true">6.</strong> Calling your first API with the windows crate</a></li><li class="chapter-item expanded "><a href="rust-getting-started/calling-your-first-windows-sys-api.html"><strong aria-hidden="true">7.</strong> Calling your first API with the windows-sys crate</a></li><li class="chapter-item expanded "><a href="rust-getting-started/calling-your-first-com-api.html"><strong aria-hidden="true">8.</strong> Calling your first COM API</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -143,11 +143,243 @@
                 <div id="content" class="content">
                     <main>
                         <p>Kenny Kerr is a Software Engineer at Microsoft where he works on C++ and Rust tools and libraries for the Windows operating system. He is the creator of <a href="https://github.com/microsoft/cppwinrt">C++/WinRT</a> and <a href="https://github.com/microsoft/windows-rs">Rust for Windows</a>. Kenny also wrote recurring columns and feature articles for C/C++ Users Journal, Visual Studio Magazine, MSDN Magazine, originally called Microsoft Systems Journal.</p>
+<p><a href="rust-getting-started">Getting Started with Rust</a></p>
 <p><a href="https://github.com/kennykerr">Kenny on GitHub</a></p>
 <p><a href="https://www.pluralsight.com/authors/kenny-kerr">Kenny's courses on Pluralsight</a></p>
 <p><a href="http://web.archive.org/web/20230104081844/https://kennykerr.ca/">Kenny on the Wayback Machine</a></p>
 <p><a href="https://www.linkedin.com/in/kennykerr/">Kenny on LinkedIn</a></p>
 <p><a href="https://www.youtube.com/@kennykerrca/videos">Kenny on YouTube</a></p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="getting-started-with-rust"><a class="header" href="#getting-started-with-rust">Getting Started with Rust</a></h1>
+<p>The <a href="https://github.com/microsoft/windows-rs">windows-rs</a> project has been available for some time and while I still have a great deal of work left to do, I thought I should start spending some time writing about Rust for Windows and not simply building Rust for Windows. 😊 As I did for <a href="https://github.com/microsoft/cppwinrt">C++/WinRT</a>, I thought I would start writing a few short &quot;how to&quot; or &quot;how it works&quot; articles to help developers understand some of the fundamentals of the <a href="https://github.com/microsoft/windows-rs">windows-rs</a> project.</p>
+<p>Some of these topics will be obvious for Rust developers but perhaps not the Windows developer new to Rust. Other topics might be obvious to Windows developers but less so to the seasoned Rust developer new to Windows. Either way, I hope you find it useful. Feel free to <a href="https://github.com/microsoft/windows-rs/issues">open an issue on the repo</a> if you have any questions.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="choosing-between-the-windows-and-windows-sys-crates"><a class="header" href="#choosing-between-the-windows-and-windows-sys-crates">Choosing between the windows and windows-sys crates</a></h1>
+<p>The <a href="https://crates.io/crates/windows">windows</a> crate provides bindings for the Windows API, including C-style APIs like <code>CreateThreadpool</code> as well as COM and WinRT APIs like DirectX. This crate provides the most comprehensive API coverage for the Windows operating system. Where possible, the <code>windows</code> crate also attempts to provide a more idiomatic and safe programming model for Rust developers.</p>
+<p>The <a href="https://crates.io/crates/windows-sys">windows-sys</a> crate provides raw bindings for the C-style Windows APIs. It lacks support for COM and WinRT APIs. The <code>windows-sys</code> crate was born out of the realization that the most expensive aspect of the <code>windows</code> crate, in terms of build time, is the cost of compiling function bodies. The Rust compiler just spends a great deal of effort compiling function bodies, so a version of the <code>windows</code> crate that only includes declarations is both much smaller and faster by comparison. The trouble is that COM-style virtual function calls require extra code gen in Rust (unlike C++) and this in turn leads to slower compile times. Enter the <code>windows-sys</code> crate.</p>
+<p>Of course, we continue to work hard at improving performance both in terms of the underlying Rust compiler toolchain as well as the efficiency of the code generated for these crates. We are thus confident that the compile-time will continue to improve.</p>
+<div class="table-wrapper"><table><thead><tr><th>What do you need?</th><th><code>windows</code></th><th><code>windows-sys</code></th></tr></thead><tbody>
+<tr><td>Fast compile times are one of your top concerns</td><td></td><td>✅</td></tr>
+<tr><td>You need <code>no_std</code> support</td><td></td><td>✅</td></tr>
+<tr><td>You need COM or WinRT support</td><td>✅</td><td></td></tr>
+<tr><td>You would prefer to use APIs that feel idiomatic to Rust</td><td>✅</td><td></td></tr>
+</tbody></table>
+</div><div style="break-before: page; page-break-before: always;"></div><h1 id="how-are-these-crates-built"><a class="header" href="#how-are-these-crates-built">How are these crates built?</a></h1>
+<p>The <a href="https://crates.io/crates/windows">windows</a> and <a href="https://crates.io/crates/windows-sys">windows-sys</a> crates are generated from metadata describing the Windows API. Originally only WinRT APIs included metadata, but metadata is now provided for older C and COM APIs as well. The https://github.com/microsoft/win32metadata/ project provides the tools to produce the metadata and the <a href="https://crates.io/crates/windows-metadata">windows-metadata</a> and <a href="https://crates.io/crates/windows-bindgen">windows-bindgen</a> crates are used to read the metadata and generate the <code>windows</code> and <code>windows-sys</code> crates. The bindings are generated differently based on the differing goals of the respective crates. You can find the exact metadata file used to generate a particular version of the <code>windows</code> and <code>windows-sys</code> crates <a href="https://github.com/microsoft/windows-rs/tree/master/crates/libs/metadata/default">here</a>.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="how-do-i-find-a-particular-api"><a class="header" href="#how-do-i-find-a-particular-api">How do I find a particular API?</a></h1>
+<p>First <a href="rust-getting-started/rust-getting-started/windows-or-windows-sys.html">pick the crate you would like to use</a>. Then search the documentation for the chosen crate:</p>
+<ul>
+<li>
+<p><a href="https://microsoft.github.io/windows-docs-rs/">windows</a></p>
+</li>
+<li>
+<p><a href="https://docs.rs/windows-sys">windows-sys</a></p>
+</li>
+</ul>
+<p>Note that the docs include a note indicating which features to enable in order to access a particular API. </p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="what-apis-are-included"><a class="header" href="#what-apis-are-included">What APIs are included?</a></h1>
+<p>All Windows APIs provided by the Windows SDK are included, with a few exceptions. The definitions of these APIs are collected from <a href="rust-getting-started/rust-getting-started/how-are-crates-built.html">metadata and transformed into Rust bindings</a>. The process of generating the Rust bindings purposefully omits a few APIs. APIs are only excluded if they are (1) unsuitable for Rust developers and (2) impose a large hit on the overall size of the <a href="https://crates.io/crates/windows">windows</a> and <a href="https://crates.io/crates/windows-sys">windows-sys</a> crates. </p>
+<p>The Xaml API is excluded because it is all but unusable without direct language support that only the Xaml team can provide. Xaml is also focused and tailored for C# app development so this API isn't applicable to Rust developers. The MsHtml API is also excluded because it is only intended for Microsoft's older scripting languages like JScript and VBScript. It is also by far the single largest module as measured in lines of code. Beyond that, a few deprecrated and unusable APIs are excluded. You can see exactly what the <a href="https://github.com/microsoft/windows-rs/blob/59950e2e2b7bd79f2de2020ee33745d7f642230f/crates/tools/windows/src/main.rs#L4-L5">windows crate excludes</a> and what the <a href="https://github.com/microsoft/windows-rs/blob/59950e2e2b7bd79f2de2020ee33745d7f642230f/crates/tools/sys/src/main.rs#L5-L35">windows-sys crate excludes</a>.</p>
+<p>Beyond that, the <code>windows-sys</code> crate currently excludes all COM and WinRT APIs. The <code>windows-sys</code> crate only includes declarations and COM and WinRT calls are far too cumbersome without the abstractions provided by the windows crate. Here are some tips for <a href="rust-getting-started/rust-getting-started/windows-or-windows-sys.html">choosing between the windows and windows-sys crates</a>.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="wheres-my-favorite-macro-from-the-windows-sdk"><a class="header" href="#wheres-my-favorite-macro-from-the-windows-sdk">Where's my favorite macro from the Windows SDK?</a></h1>
+<p>The <a href="https://crates.io/crates/windows">windows</a> and <a href="https://crates.io/crates/windows-sys">windows-sys</a> crates are <a href="rust-getting-started/rust-getting-started/how-are-crates-built.html">generated from metadata</a>. This metadata only includes type definitions and function signatures, not macros, header-only functions, or function bodies. You may find some equivalents of common C/C++ helper macros and functions in the <code>windows</code> crate, but in general the macros don't have direct equivalents in the <code>windows</code> or <code>windows-sys</code> crates. </p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="calling-your-first-api-with-the-windows-crate"><a class="header" href="#calling-your-first-api-with-the-windows-crate">Calling your first API with the windows crate</a></h1>
+<p>So you want to get a feel for calling a simple Windows API. Where to start? Let's look at a relatively simple API for submitting callbacks to the thread pool. You can read more about this API here. https://learn.microsoft.com/en-us/archive/msdn-magazine/2011/august/windows-with-c-the-windows-thread-pool-and-work</p>
+<p>The first step is to add a dependency on the <a href="https://crates.io/crates/windows">windows</a> crate and indicate which features you'd like to access:</p>
+<p>[dependencies.windows]
+version = &quot;0.43&quot;
+features = [
+&quot;Win32_Foundation&quot;,
+&quot;Win32_System_Threading&quot;,
+]</p>
+<p>Why these two features? Well, the thread pool API is defined in the <code>Win32::System::Threading</code> module and we'll also use a handful of definitions from the <code>Win32::Foundation</code> module. If you're unsure, the docs for any given API provide a helpful comment indicating which features are required. For example, here are the docs for <a href="https://microsoft.github.io/windows-docs-rs/doc/windows/Win32/System/Threading/fn.WaitForThreadpoolWorkCallbacks.html">WaitForThreadpoolWorkCallbacks</a> where you can see it depends on both of these features since it is defined in the <code>Win32::System::Threading</code> module and depends on <code>BOOL</code> which is defined in the <code>Win32::Foundation</code> module.</p>
+<p>Cargo will now handle the heavy lifting, tracking down the dependencies and making sure the import libs are present, so that we can simply call these APIs in Rust without any further configuration. We can employ a <code>use</code> declaration to make these APIs a little more accessible:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use windows::{Win32::Foundation::*, Win32::System::Threading::*};
+<span class="boring">}</span></code></pre></pre>
+<p>In order to &quot;prove&quot; that the code works and yet keep it real simple let's just use the thread pool to increment a counter some number of times. Here we can use a reader-writer lock for safe and multi-threaded access to the counter variable:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>static COUNTER: std::sync::RwLock&lt;i32&gt; = std::sync::RwLock::new(0);
+<span class="boring">}</span></code></pre></pre>
+<p>For this example, I'll just use a simple <code>main</code> function with a big <code>unsafe</code> block since virtually everything here is going to be <code>unsafe</code>. Why is that? Well the <code>windows</code> crate lets you call foreign functions and these are generally assumed to be <code>unsafe</code>. </p>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+    unsafe {
+        
+    }
+}</code></pre></pre>
+<p>The thread pool API is modeled as a set of &quot;objects&quot; exposed via a traditional C-style API. The first thing we need to do is create a work object:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let work = CreateThreadpoolWork(Some(callback), None, None);
+<span class="boring">}</span></code></pre></pre>
+<p>The first parameter is a pointer to a callback function. The remaining parameters are optional and you can read more about them in my thread pool series on MSDN.</p>
+<p>Since this function allocates memory, it is possible that it might fail, and this is indicated by returning a null pointer rather than a valid work object handle. We'll check for this condition and call the <code>GetLastError</code> function to display any relevant error code:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>if work.is_null() {
+    println!(&quot;{:?}&quot;, GetLastError());
+    return;
+}
+<span class="boring">}</span></code></pre></pre>
+<p>The callback itself must be a valid C-style callback according to the signature expected by the thread pool API. Here's a simple callback that will increment the count:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>extern &quot;system&quot; fn callback(
+    _: *mut TP_CALLBACK_INSTANCE,
+    _: *mut std::ffi::c_void,
+    _: *mut TP_WORK,
+) {
+    let mut counter = COUNTER.write().unwrap();
+    *counter += 1;
+}
+<span class="boring">}</span></code></pre></pre>
+<p>The parameters can safely be ignored but do come in handy from time to time. At this point, we have a valid work object but nothing is happening yet. In order to kick off some &quot;work&quot;, we need to submit the work object to the thread pool. You can do so as many times as you'd like, so lets go ahead and do it ten times:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>for _ in 0..10 {
+    SubmitThreadpoolWork(work);
+}
+<span class="boring">}</span></code></pre></pre>
+<p>You can now expect the callbacks to run concurrently, hence the <code>RwLock</code> above. Of course, with all of that concurrency we need some way to tell when the work is done. That's the job of the <code>WaitForThreadpoolWorkCallbacks</code> function:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>WaitForThreadpoolWorkCallbacks(work, false);
+<span class="boring">}</span></code></pre></pre>
+<p>The second parameter indicates whether we would like to cancel any pending callbacks that have not started to execute. Passing false here thus indicates that we would like the wait function to block until all of the submitted work has completed. At that point, we can safely close the work object to free its memory:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>CloseThreadpoolWork(work);
+<span class="boring">}</span></code></pre></pre>
+<p>And just to prove that it works reliably, we can print out the counter's value:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let counter = COUNTER.read().unwrap();
+println!(&quot;counter: {}&quot;, *counter);
+<span class="boring">}</span></code></pre></pre>
+<p>Running the sample should print something like this:</p>
+<pre><code>counter: 10
+</code></pre>
+<p>Here's the <a href="https://github.com/microsoft/windows-rs/blob/master/crates/samples/windows/thread_pool_work/src/main.rs">full sample for reference</a>.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="calling-your-first-api-with-the-windows-sys-crate"><a class="header" href="#calling-your-first-api-with-the-windows-sys-crate">Calling your first API with the windows-sys crate</a></h1>
+<p>So you want to get a feel for calling a simple Windows API. Where to start? Let's look at a relatively simple API for submitting callbacks to the thread pool. You can read more about this API here. https://learn.microsoft.com/en-us/archive/msdn-magazine/2011/august/windows-with-c-the-windows-thread-pool-and-work</p>
+<p>The first step is to add a dependency on the <a href="https://crates.io/crates/windows-sys">windows-sys</a> crate and indicate which features you'd like to access:</p>
+<p>[dependencies.windows-sys]
+version = &quot;0.43&quot;
+features = [
+&quot;Win32_Foundation&quot;,
+&quot;Win32_System_Threading&quot;,
+]</p>
+<p>Why these two features? Well, the thread pool API is defined in the <code>Win32::System::Threading</code> module and we'll also use a handful of definitions from the <code>Win32::Foundation</code> module. If you're unsure, the docs for any given API provide a helpful comment indicating which features are required. For example, here are the docs for <a href="https://docs.rs/windows-sys/latest/windows_sys/Win32/System/Threading/fn.WaitForThreadpoolWorkCallbacks.html">WaitForThreadpoolWorkCallbacks</a> where you can see it depends on both of these features since it is defined in the <code>Win32::System::Threading</code> module and depends on <code>BOOL</code> which is defined in the <code>Win32::Foundation</code> module.</p>
+<p>Cargo will now handle the heavy lifting, tracking down the dependencies and making sure the import libs are present, so that we can simply call these APIs in Rust without any further configuration. We can employ a <code>use</code> declaration to make these APIs a little more accessible:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use windows_sys::{Win32::Foundation::*, Win32::System::Threading::*};
+<span class="boring">}</span></code></pre></pre>
+<p>In order to &quot;prove&quot; that the code works and yet keep it real simple let's just use the thread pool to increment a counter some number of times. Here we can use a reader-writer lock for safe and multi-threaded access to the counter variable:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>static COUNTER: std::sync::RwLock&lt;i32&gt; = std::sync::RwLock::new(0);
+<span class="boring">}</span></code></pre></pre>
+<p>For this example, I'll just use a simple <code>main</code> function with a big <code>unsafe</code> block since virtually everything here is going to be <code>unsafe</code>. Why is that? Well the <code>windows</code> crate lets you call foreign functions and these are generally assumed to be <code>unsafe</code>. </p>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+    unsafe {
+        
+    }
+}</code></pre></pre>
+<p>The thread pool API is modeled as a set of &quot;objects&quot; exposed via a traditional C-style API. The first thing we need to do is create a work object:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let work = CreateThreadpoolWork(Some(callback), std::ptr::null_mut(), std::ptr::null());
+<span class="boring">}</span></code></pre></pre>
+<p>The first parameter is a pointer to a callback function. The remaining parameters are optional and you can read more about them in my thread pool series on MSDN.</p>
+<p>Since this function allocates memory, it is possible that it might fail, and this is indicated by returning a null pointer rather than a valid work object handle. We'll check for this condition and call the <code>GetLastError</code> function to display any relevant error code:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>if work.is_null() {
+    println!(&quot;{:?}&quot;, GetLastError());
+    return;
+}
+<span class="boring">}</span></code></pre></pre>
+<p>The callback itself must be a valid C-style callback according to the signature expected by the thread pool API. Here's a simple callback that will increment the count:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>extern &quot;system&quot; fn callback(
+    _: *mut TP_CALLBACK_INSTANCE,
+    _: *mut std::ffi::c_void,
+    _: *mut TP_WORK,
+) {
+    let mut counter = COUNTER.write().unwrap();
+    *counter += 1;
+}
+<span class="boring">}</span></code></pre></pre>
+<p>The parameters can safely be ignored but do come in handy from time to time. At this point, we have a valid work object but nothing is happening yet. In order to kick off some &quot;work&quot;, we need to submit the work object to the thread pool. You can do so as many times as you'd like, so lets go ahead and do it ten times:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>for _ in 0..10 {
+    SubmitThreadpoolWork(work);
+}
+<span class="boring">}</span></code></pre></pre>
+<p>You can now expect the callbacks to run concurrently, hence the <code>RwLock</code> above. Of course, with all of that concurrency we need some way to tell when the work is done. That's the job of the <code>WaitForThreadpoolWorkCallbacks</code> function:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>WaitForThreadpoolWorkCallbacks(work, 0);
+<span class="boring">}</span></code></pre></pre>
+<p>The second parameter indicates whether we would like to cancel any pending callbacks that have not started to execute. Passing <code>0</code>, meaning false, here thus indicates that we would like the wait function to block until all of the submitted work has completed. At that point, we can safely close the work object to free its memory:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>CloseThreadpoolWork(work);
+<span class="boring">}</span></code></pre></pre>
+<p>And just to prove that it works reliably, we can print out the counter's value:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let counter = COUNTER.read().unwrap();
+println!(&quot;counter: {}&quot;, *counter);
+<span class="boring">}</span></code></pre></pre>
+<p>Running the sample should print something like this:</p>
+<pre><code>counter: 10
+</code></pre>
+<p>Here's the <a href="https://github.com/microsoft/windows-rs/blob/master/crates/samples/windows-sys/thread_pool_work/src/main.rs">full sample for reference</a>.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="calling-your-first-com-api"><a class="header" href="#calling-your-first-com-api">Calling your first COM API</a></h1>
+<p>COM APIs are unique in that they expose functionality through interfaces. An interface is just a collection of virtual function pointers grouped together in what is known as a vtable, or virtual function table. This is not something that Rust supports directly, like C++ does, but the <a href="https://crates.io/crates/windows">windows</a> crate provides the necessary code gen to make it possible and seamless. A COM API will still typically start life through a traditional C-style function call in order to get your hands on a COM interface. From there you might call other methods via the interface. </p>
+<p>Some COM-based APIs can get real complicated so let’s start with a very simple example. The <code>CreateUri</code> function is <a href="https://learn.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/platform-apis/ms775098(v=vs.85)">officially documented on MSDN</a> as returning the <code>IUri</code> interface representing the results of parsing the given URI. The Rust <a href="https://microsoft.github.io/windows-docs-rs/doc/windows/Win32/System/Com/fn.CreateUri.html">docs for the windows crate</a> indicate that it resides in the <code>Win32::System::Com</code> module so we can configure our <code>windows</code> crate dependency accordingly:</p>
+<pre><code>[dependencies.windows]
+version = &quot;0.43&quot;
+features = [
+    &quot;Win32_System_Com&quot;,
+]
+</code></pre>
+<p>And we can employ a <code>use</code> declaration to make this API a little more accessible. The <code>windows</code> crate's <code>core</code> module also provides a few helpers to make it easier to work with COM interfaces, so we’ll include that as well:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use windows::{core::*, Win32::System::Com::*};
+<span class="boring">}</span></code></pre></pre>
+<p>For this example, I'll just use a simple <code>main</code> function with a big <code>unsafe</code> block since virtually everything here is going to be <code>unsafe</code>. Why is that? Well the <code>windows</code> crate lets you call foreign functions and these are generally assumed to be <code>unsafe</code>. </p>
+<pre><pre class="playground"><code class="language-rust">fn main() -&gt; Result&lt;()&gt; {
+    unsafe {
+
+
+        
+        Ok(())
+    }
+}</code></pre></pre>
+<p>The only &quot;interesting&quot; point here is the use of the <code>Result</code> type from the <code>windows::core</code> module that provides Windows error handling to simplify the following API calls. And with that, we can call the <code>CreateUri</code> function as follows:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let uri = CreateUri(w!(&quot;http://kennykerr.ca&quot;), Uri_CREATE_CANONICALIZE, 0)?;
+<span class="boring">}</span></code></pre></pre>
+<p>There's quite a lot going on here. The first parameter is actually a <code>PCWSTR</code>, representing a null-terminated wide string used by many Windows APIs. The <code>windows</code> crate provides the handy <code>w!</code> macro for creating a valid null-terminated wide string as a compile-time constant. The second parameter is just the default flag specified by the official documentation. The third parameter is reserved and should thus be zero.</p>
+<p>The resulting <code>IUri</code> object has various methods that we can now use to inspect the URI. The <a href="https://learn.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/platform-apis/ms775038(v=vs.85)">official documentation</a> describes the various interface methods and <a href="https://microsoft.github.io/windows-docs-rs/doc/windows/Win32/System/Com/struct.IUri.html">the Rust docs</a> give you a quick glimpse at their various signatures so that you can quickly figure out how to call them in Rust. For this example, let’s just call two of them to print out the URI's domain and the HTTP port number:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let domain = uri.GetDomain()?;
+let port = uri.GetPort()?;
+
+println!(&quot;{domain} ({port})&quot;);
+<span class="boring">}</span></code></pre></pre>
+<p>Under the hood, those methods will invoke the virtual functions through the COM interface and into the implementation provided by the API. They also provide a bunch of error and signature transformation to make it very natural to use from Rust. And that’s it, running the sample should print something like this:</p>
+<pre><code>kennykerr.ca (80)
+</code></pre>
+<p>Here's the <a href="https://github.com/microsoft/windows-rs/blob/master/crates/samples/windows/com_uri/src/main.rs">full sample for reference</a>.</p>
 
                     </main>
 
