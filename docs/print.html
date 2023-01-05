@@ -142,8 +142,10 @@
 
                 <div id="content" class="content">
                     <main>
-                        <p>Kenny Kerr is a Principal Software Engineer at Microsoft where he works on C++ and Rust tools and libraries for the Windows operating system.</p>
+                        <p>Kenny Kerr is a Software Engineer at Microsoft where he works on C++ and Rust tools and libraries for the Windows operating system. Kenny is the creator of <a href="https://github.com/microsoft/cppwinrt">C++/WinRT</a> and <a href="https://github.com/microsoft/windows-rs">Rust for Windows</a>. </p>
 <p><a href="https://github.com/kennykerr">Kenny on GitHub</a></p>
+<p><a href="https://www.pluralsight.com/authors/kenny-kerr">Kenny's courses on Pluralsight</a></p>
+<p><a href="http://web.archive.org/web/20230104081844/https://kennykerr.ca/">Kenny on the Wayback Machine</a></p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="hosting"><a class="header" href="#hosting">Hosting</a></h1>
 
                     </main>
@@ -163,6 +165,22 @@
 
         </div>
 
+        <!-- Livereload script (if served using the cli tool) -->
+        <script>
+            const wsProtocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
+            const wsAddress = wsProtocol + "//" + location.host + "/" + "__livereload";
+            const socket = new WebSocket(wsAddress);
+            socket.onmessage = function (event) {
+                if (event.data === "reload") {
+                    socket.close();
+                    location.reload();
+                }
+            };
+
+            window.onbeforeunload = function() {
+                socket.close();
+            }
+        </script>
 
 
 
