@@ -81,7 +81,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="index.html">Introduction</a></li><li class="spacer"></li><li class="chapter-item expanded affix "><a href="2018/03/24/cppwinrt-hosting-the-windows-runtime/index.html">Hosting</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="index.html">Introduction</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -146,7 +146,6 @@
 <p><a href="https://github.com/kennykerr">Kenny on GitHub</a></p>
 <p><a href="https://www.pluralsight.com/authors/kenny-kerr">Kenny's courses on Pluralsight</a></p>
 <p><a href="http://web.archive.org/web/20230104081844/https://kennykerr.ca/">Kenny on the Wayback Machine</a></p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="hosting"><a class="header" href="#hosting">Hosting</a></h1>
 
                     </main>
 
@@ -165,6 +164,22 @@
 
         </div>
 
+        <!-- Livereload script (if served using the cli tool) -->
+        <script>
+            const wsProtocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
+            const wsAddress = wsProtocol + "//" + location.host + "/" + "__livereload";
+            const socket = new WebSocket(wsAddress);
+            socket.onmessage = function (event) {
+                if (event.data === "reload") {
+                    socket.close();
+                    location.reload();
+                }
+            };
+
+            window.onbeforeunload = function() {
+                socket.close();
+            }
+        </script>
 
 
 
