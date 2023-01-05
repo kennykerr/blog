@@ -6,3 +6,4 @@ build-dir = "docs"
 
 [output.html]
 cname = "kennykerr.ca"
+git-repository-url = "https://github.com/kennykerr/blog"
