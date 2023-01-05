@@ -1,6 +1,6 @@
 # Calling your first API with the windows-sys crate
 
-So you want to get a feel for calling a simple Windows API. Where to start? Let's look at a relatively simple API for submitting callbacks to the thread pool. You can read more about this API here. https://learn.microsoft.com/en-us/archive/msdn-magazine/2011/august/windows-with-c-the-windows-thread-pool-and-work
+So you want to get a feel for calling a simple Windows API. Where to start? Let's look at a relatively simple API for submitting callbacks to the thread pool. You can read [more about this API here](https://learn.microsoft.com/en-us/archive/msdn-magazine/2011/august/windows-with-c-the-windows-thread-pool-and-work).
 
 The first step is to add a dependency on the [windows-sys](https://crates.io/crates/windows-sys) crate and indicate which features you'd like to access:
 

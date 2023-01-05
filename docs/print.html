@@ -182,7 +182,7 @@
 <div style="break-before: page; page-break-before: always;"></div><h1 id="wheres-my-favorite-macro-from-the-windows-sdk"><a class="header" href="#wheres-my-favorite-macro-from-the-windows-sdk">Where's my favorite macro from the Windows SDK?</a></h1>
 <p>The <a href="https://crates.io/crates/windows">windows</a> and <a href="https://crates.io/crates/windows-sys">windows-sys</a> crates are <a href="rust-getting-started/how-are-crates-built.html">generated from metadata</a>. This metadata only includes type definitions and function signatures, not macros, header-only functions, or function bodies. You may find some equivalents of common C/C++ helper macros and functions in the <code>windows</code> crate, but in general the macros don't have direct equivalents in the <code>windows</code> or <code>windows-sys</code> crates. </p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="calling-your-first-api-with-the-windows-crate"><a class="header" href="#calling-your-first-api-with-the-windows-crate">Calling your first API with the windows crate</a></h1>
-<p>So you want to get a feel for calling a simple Windows API. Where to start? Let's look at a relatively simple API for submitting callbacks to the thread pool. You can read more about this API here. https://learn.microsoft.com/en-us/archive/msdn-magazine/2011/august/windows-with-c-the-windows-thread-pool-and-work</p>
+<p>So you want to get a feel for calling a simple Windows API. Where to start? Let's look at a relatively simple API for submitting callbacks to the thread pool. You can read <a href="https://learn.microsoft.com/en-us/archive/msdn-magazine/2011/august/windows-with-c-the-windows-thread-pool-and-work">more about this API here</a>.</p>
 <p>The first step is to add a dependency on the <a href="https://crates.io/crates/windows">windows</a> crate and indicate which features you'd like to access:</p>
 <pre><code>[dependencies.windows]
 version = &quot;0.43&quot;
@@ -262,7 +262,7 @@ println!(&quot;counter: {}&quot;, *counter);
 </code></pre>
 <p>Here's the <a href="https://github.com/microsoft/windows-rs/blob/master/crates/samples/windows/thread_pool_work/src/main.rs">full sample for reference</a>.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="calling-your-first-api-with-the-windows-sys-crate"><a class="header" href="#calling-your-first-api-with-the-windows-sys-crate">Calling your first API with the windows-sys crate</a></h1>
-<p>So you want to get a feel for calling a simple Windows API. Where to start? Let's look at a relatively simple API for submitting callbacks to the thread pool. You can read more about this API here. https://learn.microsoft.com/en-us/archive/msdn-magazine/2011/august/windows-with-c-the-windows-thread-pool-and-work</p>
+<p>So you want to get a feel for calling a simple Windows API. Where to start? Let's look at a relatively simple API for submitting callbacks to the thread pool. You can read <a href="https://learn.microsoft.com/en-us/archive/msdn-magazine/2011/august/windows-with-c-the-windows-thread-pool-and-work">more about this API here</a>.</p>
 <p>The first step is to add a dependency on the <a href="https://crates.io/crates/windows-sys">windows-sys</a> crate and indicate which features you'd like to access:</p>
 <pre><code>[dependencies.windows-sys]
 version = &quot;0.43&quot;
