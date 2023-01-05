@@ -4,12 +4,14 @@ So you want to get a feel for calling a simple Windows API. Where to start? Let'
 
 The first step is to add a dependency on the [windows](https://crates.io/crates/windows) crate and indicate which features you'd like to access:
 
+```
 [dependencies.windows]
 version = "0.43"
 features = [
     "Win32_Foundation",
     "Win32_System_Threading",
 ]
+```
 
 Why these two features? Well, the thread pool API is defined in the `Win32::System::Threading` module and we'll also use a handful of definitions from the `Win32::Foundation` module. If you're unsure, the docs for any given API provide a helpful comment indicating which features are required. For example, here are the docs for [WaitForThreadpoolWorkCallbacks](https://microsoft.github.io/windows-docs-rs/doc/windows/Win32/System/Threading/fn.WaitForThreadpoolWorkCallbacks.html) where you can see it depends on both of these features since it is defined in the `Win32::System::Threading` module and depends on `BOOL` which is defined in the `Win32::Foundation` module.
 

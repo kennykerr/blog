@@ -184,12 +184,13 @@
 <div style="break-before: page; page-break-before: always;"></div><h1 id="calling-your-first-api-with-the-windows-crate"><a class="header" href="#calling-your-first-api-with-the-windows-crate">Calling your first API with the windows crate</a></h1>
 <p>So you want to get a feel for calling a simple Windows API. Where to start? Let's look at a relatively simple API for submitting callbacks to the thread pool. You can read more about this API here. https://learn.microsoft.com/en-us/archive/msdn-magazine/2011/august/windows-with-c-the-windows-thread-pool-and-work</p>
 <p>The first step is to add a dependency on the <a href="https://crates.io/crates/windows">windows</a> crate and indicate which features you'd like to access:</p>
-<p>[dependencies.windows]
+<pre><code>[dependencies.windows]
 version = &quot;0.43&quot;
 features = [
-&quot;Win32_Foundation&quot;,
-&quot;Win32_System_Threading&quot;,
-]</p>
+    &quot;Win32_Foundation&quot;,
+    &quot;Win32_System_Threading&quot;,
+]
+</code></pre>
 <p>Why these two features? Well, the thread pool API is defined in the <code>Win32::System::Threading</code> module and we'll also use a handful of definitions from the <code>Win32::Foundation</code> module. If you're unsure, the docs for any given API provide a helpful comment indicating which features are required. For example, here are the docs for <a href="https://microsoft.github.io/windows-docs-rs/doc/windows/Win32/System/Threading/fn.WaitForThreadpoolWorkCallbacks.html">WaitForThreadpoolWorkCallbacks</a> where you can see it depends on both of these features since it is defined in the <code>Win32::System::Threading</code> module and depends on <code>BOOL</code> which is defined in the <code>Win32::Foundation</code> module.</p>
 <p>Cargo will now handle the heavy lifting, tracking down the dependencies and making sure the import libs are present, so that we can simply call these APIs in Rust without any further configuration. We can employ a <code>use</code> declaration to make these APIs a little more accessible:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
@@ -263,12 +264,13 @@ println!(&quot;counter: {}&quot;, *counter);
 <div style="break-before: page; page-break-before: always;"></div><h1 id="calling-your-first-api-with-the-windows-sys-crate"><a class="header" href="#calling-your-first-api-with-the-windows-sys-crate">Calling your first API with the windows-sys crate</a></h1>
 <p>So you want to get a feel for calling a simple Windows API. Where to start? Let's look at a relatively simple API for submitting callbacks to the thread pool. You can read more about this API here. https://learn.microsoft.com/en-us/archive/msdn-magazine/2011/august/windows-with-c-the-windows-thread-pool-and-work</p>
 <p>The first step is to add a dependency on the <a href="https://crates.io/crates/windows-sys">windows-sys</a> crate and indicate which features you'd like to access:</p>
-<p>[dependencies.windows-sys]
+<pre><code>[dependencies.windows-sys]
 version = &quot;0.43&quot;
 features = [
-&quot;Win32_Foundation&quot;,
-&quot;Win32_System_Threading&quot;,
-]</p>
+    &quot;Win32_Foundation&quot;,
+    &quot;Win32_System_Threading&quot;,
+]
+</code></pre>
 <p>Why these two features? Well, the thread pool API is defined in the <code>Win32::System::Threading</code> module and we'll also use a handful of definitions from the <code>Win32::Foundation</code> module. If you're unsure, the docs for any given API provide a helpful comment indicating which features are required. For example, here are the docs for <a href="https://docs.rs/windows-sys/latest/windows_sys/Win32/System/Threading/fn.WaitForThreadpoolWorkCallbacks.html">WaitForThreadpoolWorkCallbacks</a> where you can see it depends on both of these features since it is defined in the <code>Win32::System::Threading</code> module and depends on <code>BOOL</code> which is defined in the <code>Win32::Foundation</code> module.</p>
 <p>Cargo will now handle the heavy lifting, tracking down the dependencies and making sure the import libs are present, so that we can simply call these APIs in Rust without any further configuration. We can employ a <code>use</code> declaration to make these APIs a little more accessible:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
