@@ -23,8 +23,6 @@ For this example, I'll just use a simple `main` function with a big `unsafe` blo
 ```rust
 fn main() -> Result<()> {
     unsafe {
-
-
         
         Ok(())
     }

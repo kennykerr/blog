@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Getting Started with Rust - Kenny Kerr</title>
+        <title>Calling your first WinRT API - Kenny Kerr</title>
 
 
         <!-- Custom HTML head -->
@@ -79,7 +79,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../index.html">Introduction</a></li><li class="chapter-item expanded affix "><a href="../rust-getting-started/index.html" class="active">Getting Started with Rust</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/windows-or-windows-sys.html"><strong aria-hidden="true">1.</strong> Choosing between the windows and windows-sys crates</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/how-are-crates-built.html"><strong aria-hidden="true">2.</strong> How are these crates built?</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/how-to-find-api.html"><strong aria-hidden="true">3.</strong> How do I find a particular API?</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/what-apis-are-included.html"><strong aria-hidden="true">4.</strong> What APIs are included?</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/where-are-the-macros.html"><strong aria-hidden="true">5.</strong> Where's my favorite macro from the Windows SDK?</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/calling-your-first-windows-api.html"><strong aria-hidden="true">6.</strong> Calling your first API with the windows crate</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/calling-your-first-windows-sys-api.html"><strong aria-hidden="true">7.</strong> Calling your first API with the windows-sys crate</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/calling-your-first-com-api.html"><strong aria-hidden="true">8.</strong> Calling your first COM API</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/calling-your-first-winrt-api.html"><strong aria-hidden="true">9.</strong> Calling your first WinRT API</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../index.html">Introduction</a></li><li class="chapter-item expanded affix "><a href="../rust-getting-started/index.html">Getting Started with Rust</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/windows-or-windows-sys.html"><strong aria-hidden="true">1.</strong> Choosing between the windows and windows-sys crates</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/how-are-crates-built.html"><strong aria-hidden="true">2.</strong> How are these crates built?</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/how-to-find-api.html"><strong aria-hidden="true">3.</strong> How do I find a particular API?</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/what-apis-are-included.html"><strong aria-hidden="true">4.</strong> What APIs are included?</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/where-are-the-macros.html"><strong aria-hidden="true">5.</strong> Where's my favorite macro from the Windows SDK?</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/calling-your-first-windows-api.html"><strong aria-hidden="true">6.</strong> Calling your first API with the windows crate</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/calling-your-first-windows-sys-api.html"><strong aria-hidden="true">7.</strong> Calling your first API with the windows-sys crate</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/calling-your-first-com-api.html"><strong aria-hidden="true">8.</strong> Calling your first COM API</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/calling-your-first-winrt-api.html" class="active"><strong aria-hidden="true">9.</strong> Calling your first WinRT API</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -143,21 +143,56 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="getting-started-with-rust"><a class="header" href="#getting-started-with-rust">Getting Started with Rust</a></h1>
-<p>The <a href="https://github.com/microsoft/windows-rs">windows-rs</a> project has been available for some time and while I still have a great deal of work left to do, I thought I should start spending some time writing about Rust for Windows and not simply building Rust for Windows. 😊 As I did for <a href="https://github.com/microsoft/cppwinrt">C++/WinRT</a>, I thought I would start writing a few short &quot;how to&quot; or &quot;how it works&quot; articles to help developers understand some of the fundamentals of the <a href="https://github.com/microsoft/windows-rs">windows-rs</a> project.</p>
-<p>Some of these topics will be obvious for Rust developers but perhaps not the Windows developer new to Rust. Other topics might be obvious to Windows developers but less so to the seasoned Rust developer new to Windows. Either way, I hope you find it useful. Feel free to <a href="https://github.com/microsoft/windows-rs/issues">open an issue on the repo</a> if you have any questions.</p>
+                        <h1 id="calling-your-first-winrt-api"><a class="header" href="#calling-your-first-winrt-api">Calling your first WinRT API</a></h1>
+<p>Windows 8 introduced the Windows Runtime, which at its heart, is just COM with a few more conventions thrown in to make language bindings appear more seamless. The <a href="https://crates.io/crates/windows">windows</a> crate already makes calling COM APIs far more seamless than it is for C++ developers, but WinRT goes further by providing first-class support for modeling things like constructors, events, and class hierarchies. In <a href="calling-your-first-com-api.html">calling your first COM API</a>, we saw that you still had to bootsrap the API with a C-style DLL export before calling COM interface methods. WinRT works the same way but abstracts this away in a generalized manner. </p>
+<p>Let’s use a simple example to illustrate. The <code>XmlDocument</code> &quot;class&quot; models an XML document that can be loaded from various sources. The Rust <a href="https://microsoft.github.io/windows-docs-rs/doc/windows/Data/Xml/Dom/struct.XmlDocument.html">docs for the windows crate</a> indicate that this type resides in the <code>Data::Xml::Dom</code> module so we can configure our <code>windows</code> crate dependency as follows:</p>
+<pre><code>[dependencies.windows]
+version = &quot;0.43&quot; 
+features = [
+    &quot;Data_Xml_Dom&quot;,
+]
+</code></pre>
+<p>And we can employ a <code>use</code> declaration to make this API a little more accessible. The <code>windows</code> crate's <code>core</code> module just provides a few helpers to make it easier to work with Windows APIs, so we'll include that as well:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use windows::{core::*, Data::Xml::Dom::XmlDocument}; 
+<span class="boring">}</span></code></pre></pre>
+<p>For this example, I'll just use a simple <code>main</code> function with a <code>Result</code> type from the <code>windows::core</code> module to provide automatic error propagation and simplify the subsequent API calls: </p>
+<pre><pre class="playground"><code class="language-rust">fn main() -&gt; Result&lt;()&gt; {
+
+    Ok(())
+}</code></pre></pre>
+<p>You'll notice that unlike the previous Win32 and COM examples, this <code>main</code> function does not need an <code>unsafe</code> block since WinRT calls are assumed to be safe thanks to its more constrained type-system.</p>
+<p>To begin, we can simply call the <code>new</code> method to create a new <code>XmlDocument</code> object:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let doc = XmlDocument::new()?;
+<span class="boring">}</span></code></pre></pre>
+<p>This looks a lot more like an idiomatic Rust type than your typical COM API, but under the hood a similar mechanism is used to instantiate the <code>XmlDocument</code> implementation via a DLL export. We can then call the <code>LoadXml</code> method to test it out. There are various other options for loading XML from different sources, which you can <a href="https://learn.microsoft.com/en-us/uwp/api/windows.data.xml.dom.xmldocument?view=winrt-22621">read about in the official documentation</a> or from the Rust docs for the <code>XmlDocument</code> API. The <code>windows</code> crate also provides the handy <code>h!</code> macro for creating an <code>HSTRING</code>, the string type used by WinRT APIs:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>doc.LoadXml(h!(&quot;&lt;html&gt;hello world&lt;/html&gt;&quot;))?;
+<span class="boring">}</span></code></pre></pre>
+<p>And just like that, we have a fully-formed Xml document that we can inspect. For this example, let's just grab the document element and then do some basic queries as follows:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>    let root = doc.DocumentElement()?;
+    assert!(root.NodeName()? == &quot;html&quot;);
+    println!(&quot;{}&quot;, root.InnerText()?);
+<span class="boring">}</span></code></pre></pre>
+<p>First we assert that the element's name is in fact &quot;html&quot; and then print out the element's inner text. As with the previous COM example, those methods all invoke virtual functions through COM interfaces, but the <code>windows</code> crate makes it very simple to make such calls directly from Rust. And that's it, running the sample should print something like this:</p>
+<pre><code>hello world
+</code></pre>
+<p>Here's the <a href="https://github.com/microsoft/windows-rs/blob/master/crates/samples/windows/xml/src/main.rs">full sample for reference</a>.</p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="../index.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../rust-getting-started/calling-your-first-com-api.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next" href="../rust-getting-started/windows-or-windows-sys.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                                <i class="fa fa-angle-right"></i>
-                            </a>
 
                         <div style="clear: both"></div>
                     </nav>
@@ -165,13 +200,10 @@
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="../index.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../rust-getting-started/calling-your-first-com-api.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next" href="../rust-getting-started/windows-or-windows-sys.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                        <i class="fa fa-angle-right"></i>
-                    </a>
             </nav>
 
         </div>
