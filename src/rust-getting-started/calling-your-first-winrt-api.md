@@ -44,9 +44,9 @@ doc.LoadXml(h!("<html>hello world</html>"))?;
 And just like that, we have a fully-formed Xml document that we can inspect. For this example, let's just grab the document element and then do some basic queries as follows:
 
 ```rust
-    let root = doc.DocumentElement()?;
-    assert!(root.NodeName()? == "html");
-    println!("{}", root.InnerText()?);
+let root = doc.DocumentElement()?;
+assert!(root.NodeName()? == "html");
+println!("{}", root.InnerText()?);
 ```
 
 First we assert that the element's name is in fact "html" and then print out the element's inner text. As with the previous COM example, those methods all invoke virtual functions through COM interfaces, but the `windows` crate makes it very simple to make such calls directly from Rust. And that's it, running the sample should print something like this:

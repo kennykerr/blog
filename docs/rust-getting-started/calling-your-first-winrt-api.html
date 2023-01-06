@@ -176,9 +176,9 @@ features = [
 <p>And just like that, we have a fully-formed Xml document that we can inspect. For this example, let's just grab the document element and then do some basic queries as follows:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>    let root = doc.DocumentElement()?;
-    assert!(root.NodeName()? == &quot;html&quot;);
-    println!(&quot;{}&quot;, root.InnerText()?);
+</span>let root = doc.DocumentElement()?;
+assert!(root.NodeName()? == &quot;html&quot;);
+println!(&quot;{}&quot;, root.InnerText()?);
 <span class="boring">}</span></code></pre></pre>
 <p>First we assert that the element's name is in fact &quot;html&quot; and then print out the element's inner text. As with the previous COM example, those methods all invoke virtual functions through COM interfaces, but the <code>windows</code> crate makes it very simple to make such calls directly from Rust. And that's it, running the sample should print something like this:</p>
 <pre><code>hello world
