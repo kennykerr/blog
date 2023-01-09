@@ -2,12 +2,12 @@ Kenny Kerr is a Software Engineer at Microsoft where he works on C++ and Rust to
 
 [Getting Started with Rust](rust-getting-started)
 
-[Kenny on GitHub](https://github.com/kennykerr)
-
 [Kenny's courses on Pluralsight](https://www.pluralsight.com/authors/kenny-kerr)
 
-[Kenny on the Wayback Machine](http://web.archive.org/web/20230104081844/https://kennykerr.ca/)
+[Kenny on GitHub](https://github.com/kennykerr)
+
+[Kenny on YouTube](https://www.youtube.com/@kennykerrca/videos)
 
 [Kenny on LinkedIn](https://www.linkedin.com/in/kennykerr/)
 
-[Kenny on YouTube](https://www.youtube.com/@kennykerrca/videos)
+[Kenny on the Wayback Machine](http://web.archive.org/web/20230104081844/https://kennykerr.ca/)
