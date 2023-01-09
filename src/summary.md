@@ -13,3 +13,4 @@
 - [Calling your first API with the windows-sys crate](rust-getting-started/calling-your-first-windows-sys-api.md)
 - [Calling your first COM API](rust-getting-started/calling-your-first-com-api.md)
 - [Calling your first WinRT API](rust-getting-started/calling-your-first-winrt-api.md)
+- [How do I query for a specific COM interface?](rust-getting-started/how-to-query-for-com-interface.md)

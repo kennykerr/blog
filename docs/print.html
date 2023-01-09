@@ -80,7 +80,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="index.html">Introduction</a></li><li class="chapter-item expanded affix "><a href="rust-getting-started/index.html">Getting Started with Rust</a></li><li class="chapter-item expanded "><a href="rust-getting-started/windows-or-windows-sys.html"><strong aria-hidden="true">1.</strong> Choosing between the windows and windows-sys crates</a></li><li class="chapter-item expanded "><a href="rust-getting-started/how-are-crates-built.html"><strong aria-hidden="true">2.</strong> How are these crates built?</a></li><li class="chapter-item expanded "><a href="rust-getting-started/how-to-find-api.html"><strong aria-hidden="true">3.</strong> How do I find a particular API?</a></li><li class="chapter-item expanded "><a href="rust-getting-started/what-apis-are-included.html"><strong aria-hidden="true">4.</strong> What APIs are included?</a></li><li class="chapter-item expanded "><a href="rust-getting-started/where-are-the-macros.html"><strong aria-hidden="true">5.</strong> Where's my favorite macro from the Windows SDK?</a></li><li class="chapter-item expanded "><a href="rust-getting-started/calling-your-first-windows-api.html"><strong aria-hidden="true">6.</strong> Calling your first API with the windows crate</a></li><li class="chapter-item expanded "><a href="rust-getting-started/calling-your-first-windows-sys-api.html"><strong aria-hidden="true">7.</strong> Calling your first API with the windows-sys crate</a></li><li class="chapter-item expanded "><a href="rust-getting-started/calling-your-first-com-api.html"><strong aria-hidden="true">8.</strong> Calling your first COM API</a></li><li class="chapter-item expanded "><a href="rust-getting-started/calling-your-first-winrt-api.html"><strong aria-hidden="true">9.</strong> Calling your first WinRT API</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="index.html">Introduction</a></li><li class="chapter-item expanded affix "><a href="rust-getting-started/index.html">Getting Started with Rust</a></li><li class="chapter-item expanded "><a href="rust-getting-started/windows-or-windows-sys.html"><strong aria-hidden="true">1.</strong> Choosing between the windows and windows-sys crates</a></li><li class="chapter-item expanded "><a href="rust-getting-started/how-are-crates-built.html"><strong aria-hidden="true">2.</strong> How are these crates built?</a></li><li class="chapter-item expanded "><a href="rust-getting-started/how-to-find-api.html"><strong aria-hidden="true">3.</strong> How do I find a particular API?</a></li><li class="chapter-item expanded "><a href="rust-getting-started/what-apis-are-included.html"><strong aria-hidden="true">4.</strong> What APIs are included?</a></li><li class="chapter-item expanded "><a href="rust-getting-started/where-are-the-macros.html"><strong aria-hidden="true">5.</strong> Where's my favorite macro from the Windows SDK?</a></li><li class="chapter-item expanded "><a href="rust-getting-started/calling-your-first-windows-api.html"><strong aria-hidden="true">6.</strong> Calling your first API with the windows crate</a></li><li class="chapter-item expanded "><a href="rust-getting-started/calling-your-first-windows-sys-api.html"><strong aria-hidden="true">7.</strong> Calling your first API with the windows-sys crate</a></li><li class="chapter-item expanded "><a href="rust-getting-started/calling-your-first-com-api.html"><strong aria-hidden="true">8.</strong> Calling your first COM API</a></li><li class="chapter-item expanded "><a href="rust-getting-started/calling-your-first-winrt-api.html"><strong aria-hidden="true">9.</strong> Calling your first WinRT API</a></li><li class="chapter-item expanded "><a href="rust-getting-started/how-to-query-for-com-interface.html"><strong aria-hidden="true">10.</strong> How do I query for a specific COM interface?</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -423,6 +423,54 @@ println!(&quot;{}&quot;, root.InnerText()?);
 <pre><code>hello world
 </code></pre>
 <p>Here's the <a href="https://github.com/microsoft/windows-rs/blob/master/crates/samples/windows/xml/src/main.rs">full sample for reference</a>.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="how-do-i-query-for-a-specific-com-interface"><a class="header" href="#how-do-i-query-for-a-specific-com-interface">How do I query for a specific COM interface?</a></h1>
+<p>COM and WinRT interfaces in the <a href="https://crates.io/crates/windows">windows</a> crate implement the <a href="https://microsoft.github.io/windows-docs-rs/doc/windows/core/trait.Interface.html">Interface</a> trait. This trait provides the <code>cast</code> method that will use <code>QueryInterface</code> under the hood to cast the current interface to another interface supported by the object. The <code>cast</code> method returns a <code>Result&lt;T&gt;</code> so that failure can be handled in a natural way in Rust.</p>
+<p>For example, it is often necesary to get the <code>IDXGIDevice</code> interface for a given Direct3D device to interop with other rendering APIs. This is how you might create a swap chain for drawing and presenting to a Direct3D device. Let's imagine a simple function that accepts a Direct3D device and returns the underlying DXGI factory:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn get_dxgi_factory(device: &amp;ID3D11Device) -&gt; Result&lt;IDXGIFactory2&gt; {
+}
+<span class="boring">}</span></code></pre></pre>
+<p>The first thing you need to do is query or cast the Direct3D device for its DXGI interface as follows:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let device = device.cast::&lt;IDXGIDevice&gt;()?;
+<span class="boring">}</span></code></pre></pre>
+<p>If its more convenient, you can also make use of type inference as follows:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let device: IDXGIDevice = device.cast()?;
+<span class="boring">}</span></code></pre></pre>
+<p>With the COM interface in hand, we need an <code>unsafe</code> block to call its methods:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>unsafe {
+}
+<span class="boring">}</span></code></pre></pre>
+<p>Within the <code>unsafe</code> block, we can retrieve the device's physical adapter:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let adapter = device.GetAdapter()?;
+<span class="boring">}</span></code></pre></pre>
+<p>And just for fun (or debugging), we might print out the adapter's name:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>if cfg!(debug_assertions) {
+    let mut desc = Default::default();
+    adapter.GetDesc(&amp;mut desc)?;
+    println!(&quot;{}&quot;, String::from_utf16_lossy(&amp;desc.Description));
+}
+<span class="boring">}</span></code></pre></pre>
+<p>Finally, we can return the adapter's parent and also the DXGI factory object for the device:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>adapter.GetParent()
+<span class="boring">}</span></code></pre></pre>
+<p>Running the sample I get the following impressive results:</p>
+<pre><code>AMD FirePro W4100
+</code></pre>
+<p>Here's a <a href="https://github.com/microsoft/windows-rs/tree/master/crates/samples/windows/direct2d">more comprehensive DirectX example</a>.</p>
+<p>The <code>cast</code> method works equally well for WinRT classes and interfaces. It is particularly useful for <a href="https://github.com/microsoft/windows-rs/blob/master/crates/samples/windows/uiautomation/src/main.rs">interop with WinRT APIs</a>. </p>
 
                     </main>
 
