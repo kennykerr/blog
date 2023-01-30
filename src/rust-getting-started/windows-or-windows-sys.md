@@ -12,4 +12,4 @@ Of course, we continue to work hard at improving performance both in terms of th
 | You need `no_std` support | | ✅ |
 | You need COM or WinRT support | ✅ | |
 | You would prefer to use APIs that feel idiomatic to Rust | ✅ | |
-| Minimum supported Rust version | 1.64 | 1.48 |
+| Minimum supported Rust version | 1.48 | 1.48 |
