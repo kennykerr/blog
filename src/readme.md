@@ -10,4 +10,6 @@ Kenny Kerr is a Software Engineer at Microsoft where he works on C++ and Rust to
 
 [Kenny on LinkedIn](https://www.linkedin.com/in/kennykerr/)
 
+[Kenny's old blog on WordPress](https://kennykerrca.wordpress.com/)
+
 [Kenny on the Wayback Machine](http://web.archive.org/web/20230104081844/https://kennykerr.ca/)
