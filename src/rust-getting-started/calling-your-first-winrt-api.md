@@ -6,7 +6,7 @@ Let’s use a simple example to illustrate. The `XmlDocument` "class" models an 
 
 ```
 [dependencies.windows]
-version = "0.43" 
+version = "0.48" 
 features = [
     "Data_Xml_Dom",
 ]

@@ -6,7 +6,7 @@ The first step is to add a dependency on the [windows](https://crates.io/crates/
 
 ```
 [dependencies.windows]
-version = "0.43"
+version = "0.48"
 features = [
     "Win32_Foundation",
     "Win32_System_Threading",

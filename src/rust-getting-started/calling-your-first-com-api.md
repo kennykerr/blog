@@ -6,7 +6,7 @@ Some COM-based APIs can get real complicated so let’s start with a very simple
 
 ```
 [dependencies.windows]
-version = "0.43"
+version = "0.48"
 features = [
     "Win32_System_Com",
 ]

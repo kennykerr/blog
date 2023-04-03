@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Where&#x27;s my favorite macro from the Windows SDK? - Kenny Kerr</title>
+        <title>Standalone code generation - Kenny Kerr</title>
 
 
         <!-- Custom HTML head -->
@@ -80,7 +80,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../index.html">Introduction</a></li><li class="chapter-item expanded affix "><a href="../rust-getting-started/index.html">Getting Started with Rust</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/windows-or-windows-sys.html"><strong aria-hidden="true">1.</strong> Choosing between the windows and windows-sys crates</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/how-are-crates-built.html"><strong aria-hidden="true">2.</strong> How are these crates built?</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/how-to-find-api.html"><strong aria-hidden="true">3.</strong> How do I find a particular API?</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/what-apis-are-included.html"><strong aria-hidden="true">4.</strong> What APIs are included?</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/where-are-the-macros.html" class="active"><strong aria-hidden="true">5.</strong> Where's my favorite macro from the Windows SDK?</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/calling-your-first-windows-api.html"><strong aria-hidden="true">6.</strong> Calling your first API with the windows crate</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/calling-your-first-windows-sys-api.html"><strong aria-hidden="true">7.</strong> Calling your first API with the windows-sys crate</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/calling-your-first-com-api.html"><strong aria-hidden="true">8.</strong> Calling your first COM API</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/calling-your-first-winrt-api.html"><strong aria-hidden="true">9.</strong> Calling your first WinRT API</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/how-to-query-for-com-interface.html"><strong aria-hidden="true">10.</strong> How do I query for a specific COM interface?</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/standalone-code-generation.html"><strong aria-hidden="true">11.</strong> Standalone code generation</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../index.html">Introduction</a></li><li class="chapter-item expanded affix "><a href="../rust-getting-started/index.html">Getting Started with Rust</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/windows-or-windows-sys.html"><strong aria-hidden="true">1.</strong> Choosing between the windows and windows-sys crates</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/how-are-crates-built.html"><strong aria-hidden="true">2.</strong> How are these crates built?</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/how-to-find-api.html"><strong aria-hidden="true">3.</strong> How do I find a particular API?</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/what-apis-are-included.html"><strong aria-hidden="true">4.</strong> What APIs are included?</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/where-are-the-macros.html"><strong aria-hidden="true">5.</strong> Where's my favorite macro from the Windows SDK?</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/calling-your-first-windows-api.html"><strong aria-hidden="true">6.</strong> Calling your first API with the windows crate</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/calling-your-first-windows-sys-api.html"><strong aria-hidden="true">7.</strong> Calling your first API with the windows-sys crate</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/calling-your-first-com-api.html"><strong aria-hidden="true">8.</strong> Calling your first COM API</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/calling-your-first-winrt-api.html"><strong aria-hidden="true">9.</strong> Calling your first WinRT API</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/how-to-query-for-com-interface.html"><strong aria-hidden="true">10.</strong> How do I query for a specific COM interface?</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/standalone-code-generation.html" class="active"><strong aria-hidden="true">11.</strong> Standalone code generation</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -144,20 +144,47 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="wheres-my-favorite-macro-from-the-windows-sdk"><a class="header" href="#wheres-my-favorite-macro-from-the-windows-sdk">Where's my favorite macro from the Windows SDK?</a></h1>
-<p>The <a href="https://crates.io/crates/windows">windows</a> and <a href="https://crates.io/crates/windows-sys">windows-sys</a> crates are <a href="how-are-crates-built.html">generated from metadata</a>. This metadata only includes type definitions and function signatures, not macros, header-only functions, or function bodies. You may find some equivalents of common C/C++ helper macros and functions in the <code>windows</code> crate, but in general the macros don't have direct equivalents in the <code>windows</code> or <code>windows-sys</code> crates. </p>
+                        <h1 id="standalone-code-generation"><a class="header" href="#standalone-code-generation">Standalone code generation</a></h1>
+<p>Even with a <a href="windows-or-windows-sys.html">choice between the windows and windows-sys crates</a>, some developers may prefer to use completely standalone bindings. The <a href="https://crates.io/crates/windows-bindgen">windows-bindgen</a> crate lets you generate entirely standalone bindings for Windows APIs with a single function call that you can run from a test to automate the generation of bindings. This can help to reduce your dependencies while continuing to provide a sustainable path forward for any future API requirements you might have, or just to refresh your bindings from time to time to pick up any bug fixes automatically from Microsoft.</p>
+<p>Start by adding the following to your Cargo.toml file:</p>
+<pre><code class="language-toml">[dependencies.windows-targets]
+version = &quot;0.48&quot;
+
+[dev-dependencies.windows-bindgen]
+version = &quot;0.48&quot;
+</code></pre>
+<p>The <code>windows-bindgen</code> crate is only needed for generating bindings and is thus a dev dependency only. The <a href="https://crates.io/crates/windows-targets">windows-targets</a> crate is a dependency shared by the <code>windows</code> and <code>windows-sys</code> crates and only contains import libs for supported targets. This will ensure that you can link against any Windows API functions you may need. </p>
+<p>Write a test to generate bindings as follows:</p>
+<pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[test]
+fn gen_bindings() {
+    let apis = [
+        &quot;Windows.Win32.System.SystemInformation.GetTickCount&quot;,
+    ];
+
+    let bindings = windows_bindgen::standalone(&amp;apis);
+    std::fs::write(&quot;src/bindings.rs&quot;, bindings).unwrap();
+}
+<span class="boring">}</span></code></pre></pre>
+<p>Make use of any Windows APIs as needed.</p>
+<pre><code class="language-rust no_run ignore">mod bindings;
+use bindings::*;
+
+fn main() {
+    unsafe {
+        println!(&quot;{}&quot;, GetTickCount());
+    }
+}</code></pre>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="../rust-getting-started/what-apis-are-included.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../rust-getting-started/how-to-query-for-com-interface.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next" href="../rust-getting-started/calling-your-first-windows-api.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                                <i class="fa fa-angle-right"></i>
-                            </a>
 
                         <div style="clear: both"></div>
                     </nav>
@@ -165,13 +192,10 @@
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="../rust-getting-started/what-apis-are-included.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../rust-getting-started/how-to-query-for-com-interface.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next" href="../rust-getting-started/calling-your-first-windows-api.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                        <i class="fa fa-angle-right"></i>
-                    </a>
             </nav>
 
         </div>
