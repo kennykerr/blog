@@ -476,6 +476,9 @@ println!(&quot;{}&quot;, root.InnerText()?);
 <p>The <code>cast</code> method works equally well for WinRT classes and interfaces. It is particularly useful for <a href="https://github.com/microsoft/windows-rs/blob/master/crates/samples/windows/uiautomation/src/main.rs">interop with WinRT APIs</a>. </p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="standalone-code-generation"><a class="header" href="#standalone-code-generation">Standalone code generation</a></h1>
 <p>Even with a <a href="rust-getting-started/windows-or-windows-sys.html">choice between the windows and windows-sys crates</a>, some developers may prefer to use completely standalone bindings. The <a href="https://crates.io/crates/windows-bindgen">windows-bindgen</a> crate lets you generate entirely standalone bindings for Windows APIs with a single function call that you can run from a test to automate the generation of bindings. This can help to reduce your dependencies while continuing to provide a sustainable path forward for any future API requirements you might have, or just to refresh your bindings from time to time to pick up any bug fixes automatically from Microsoft.</p>
+<blockquote>
+<p><strong>Warning</strong>: Standalone code generation should only be used as a last resort for the most demanding scenarios. It is much simpler to use the <a href="https://crates.io/crates/windows-sys">windows-sys</a> crate and let Cargo manage this dependency. This <code>windows-sys</code> crate provides raw bindings, is heavily tested and widely used, and should not meaningfully impact your build time. </p>
+</blockquote>
 <p>Start by adding the following to your Cargo.toml file:</p>
 <pre><code class="language-toml">[dependencies.windows-targets]
 version = &quot;0.48&quot;
