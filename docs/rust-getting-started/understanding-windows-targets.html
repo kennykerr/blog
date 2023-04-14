@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Calling your first COM API - Kenny Kerr</title>
+        <title>Understanding the windows-targets crate - Kenny Kerr</title>
 
 
         <!-- Custom HTML head -->
@@ -80,7 +80,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../index.html">Introduction</a></li><li class="chapter-item expanded affix "><a href="../rust-getting-started/index.html">Getting Started with Rust</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/windows-or-windows-sys.html"><strong aria-hidden="true">1.</strong> Choosing between the windows and windows-sys crates</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/how-are-crates-built.html"><strong aria-hidden="true">2.</strong> How are these crates built?</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/how-to-find-api.html"><strong aria-hidden="true">3.</strong> How do I find a particular API?</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/what-apis-are-included.html"><strong aria-hidden="true">4.</strong> What APIs are included?</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/where-are-the-macros.html"><strong aria-hidden="true">5.</strong> Where's my favorite macro from the Windows SDK?</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/calling-your-first-windows-api.html"><strong aria-hidden="true">6.</strong> Calling your first API with the windows crate</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/calling-your-first-windows-sys-api.html"><strong aria-hidden="true">7.</strong> Calling your first API with the windows-sys crate</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/calling-your-first-com-api.html" class="active"><strong aria-hidden="true">8.</strong> Calling your first COM API</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/calling-your-first-winrt-api.html"><strong aria-hidden="true">9.</strong> Calling your first WinRT API</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/how-to-query-for-com-interface.html"><strong aria-hidden="true">10.</strong> How do I query for a specific COM interface?</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/understanding-windows-targets.html"><strong aria-hidden="true">11.</strong> Understanding the windows-targets crate</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/standalone-code-generation.html"><strong aria-hidden="true">12.</strong> Standalone code generation</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../index.html">Introduction</a></li><li class="chapter-item expanded affix "><a href="../rust-getting-started/index.html">Getting Started with Rust</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/windows-or-windows-sys.html"><strong aria-hidden="true">1.</strong> Choosing between the windows and windows-sys crates</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/how-are-crates-built.html"><strong aria-hidden="true">2.</strong> How are these crates built?</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/how-to-find-api.html"><strong aria-hidden="true">3.</strong> How do I find a particular API?</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/what-apis-are-included.html"><strong aria-hidden="true">4.</strong> What APIs are included?</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/where-are-the-macros.html"><strong aria-hidden="true">5.</strong> Where's my favorite macro from the Windows SDK?</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/calling-your-first-windows-api.html"><strong aria-hidden="true">6.</strong> Calling your first API with the windows crate</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/calling-your-first-windows-sys-api.html"><strong aria-hidden="true">7.</strong> Calling your first API with the windows-sys crate</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/calling-your-first-com-api.html"><strong aria-hidden="true">8.</strong> Calling your first COM API</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/calling-your-first-winrt-api.html"><strong aria-hidden="true">9.</strong> Calling your first WinRT API</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/how-to-query-for-com-interface.html"><strong aria-hidden="true">10.</strong> How do I query for a specific COM interface?</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/understanding-windows-targets.html" class="active"><strong aria-hidden="true">11.</strong> Understanding the windows-targets crate</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/standalone-code-generation.html"><strong aria-hidden="true">12.</strong> Standalone code generation</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -144,55 +144,50 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="calling-your-first-com-api"><a class="header" href="#calling-your-first-com-api">Calling your first COM API</a></h1>
-<p>COM APIs are unique in that they expose functionality through interfaces. An interface is just a collection of virtual function pointers grouped together in what is known as a vtable, or virtual function table. This is not something that Rust supports directly, like C++ does, but the <a href="https://crates.io/crates/windows">windows</a> crate provides the necessary code gen to make it possible and seamless. A COM API will still typically start life through a traditional C-style function call in order to get your hands on a COM interface. From there you might call other methods via the interface. </p>
-<p>Some COM-based APIs can get real complicated so let’s start with a very simple example. The <code>CreateUri</code> function is <a href="https://learn.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/platform-apis/ms775098(v=vs.85)">officially documented on MSDN</a> as returning the <code>IUri</code> interface representing the results of parsing the given URI. The Rust <a href="https://microsoft.github.io/windows-docs-rs/doc/windows/Win32/System/Com/fn.CreateUri.html">docs for the windows crate</a> indicate that it resides in the <code>Win32::System::Com</code> module so we can configure our <code>windows</code> crate dependency accordingly:</p>
-<pre><code>[dependencies.windows]
+                        <h1 id="understanding-the-windows-targets-crate"><a class="header" href="#understanding-the-windows-targets-crate">Understanding the windows-targets crate</a></h1>
+<p>The <a href="https://crates.io/crates/windows">windows</a> and <a href="https://crates.io/crates/windows-sys">windows-sys</a> crates depend on the <a href="https://crates.io/crates/windows-targets">windows-targets</a> crate for linker support. The <code>windows-targets</code> crate includes import libs, supports semantic versioning, and optional support for <code>raw-dylib</code>. It provides explicit import libraries for the following targets:</p>
+<ul>
+<li>i686_msvc</li>
+<li>x86_64_msvc</li>
+<li>aarch64_msvc</li>
+<li>i686_gnu</li>
+<li>x86_64_gnu</li>
+<li>x86_64_gnullvm</li>
+<li>aarch64_gnullvm</li>
+</ul>
+<p>An import lib contains information the linker uses to resolve external references to functions exported by DLLs. This allows the operating system to identify a specific DLL and function export at load time. Import libs are both toolchain- and architecture-specific. In other words, different lib files are required depending on whether you're compiling with the MSVC or GNU toolchains and whether you're compiling for the x86 or ARM64 architectures. Note that import libraries don't contain any code, as static libraries do.</p>
+<p>While the GNU and MSVC toolchains often provide some import libs to support C++ development, those lib files are often incomplete, missing, or just plain wrong. This can lead to linker errors that are very difficult to diagnose. The <code>windows-targets</code> crate ensures that all functions defined by the <code>windows</code> and <code>windows-sys</code> crates can be linked without relying on implicit lib files distributed by the toolchain. This ensures that dependencies can be managed with Cargo and streamlines cross-compilation. The <code>windows-targets</code> crate also contains version-specific lib file names ensuring semver compatibility. Without this capability, the linker will simply pick the first matching lib file name and fail to resolve any missing or mismatched imports. </p>
+<blockquote>
+<p><strong>Note</strong>: Ordinarily, you don't need to think about the <code>windows-targets</code> crate at all. The <code>windows</code> and <code>windows-sys</code> crates depend on the <code>windows-targets</code> crate automatically. Only in rare cases will you need to use it directly. </p>
+</blockquote>
+<p>Start by adding the following to your Cargo.toml file:</p>
+<pre><code class="language-toml">[dependencies.windows-targets]
 version = &quot;0.48&quot;
-features = [
-    &quot;Win32_System_Com&quot;,
-]
 </code></pre>
-<p>And we can employ a <code>use</code> declaration to make this API a little more accessible. The <code>windows</code> crate's <code>core</code> module also provides a few helpers to make it easier to work with COM interfaces, so we’ll include that as well:</p>
+<p>Use the <code>link</code> macro to define the external functions you wish to call:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>use windows::{core::*, Win32::System::Com::*};
+</span>windows_targets::link!(&quot;kernel32.dll&quot; &quot;system&quot; fn SetLastError(code: u32) -&gt; ());
+windows_targets::link!(&quot;kernel32.dll&quot; &quot;system&quot; fn GetLastError() -&gt; u32);
 <span class="boring">}</span></code></pre></pre>
-<p>For this example, I'll just use a simple <code>main</code> function with a big <code>unsafe</code> block since virtually everything here is going to be <code>unsafe</code>. Why is that? Well the <code>windows</code> crate lets you call foreign functions and these are generally assumed to be <code>unsafe</code>. </p>
-<pre><pre class="playground"><code class="language-rust">fn main() -&gt; Result&lt;()&gt; {
+<p>Make use of any Windows APIs as needed:</p>
+<pre><pre class="playground"><code class="language-rust">fn main() {
     unsafe {
-        
-        Ok(())
+        SetLastError(1234);
+        assert_eq!(GetLastError(), 1234);
     }
 }</code></pre></pre>
-<p>The only &quot;interesting&quot; point here is the use of the <code>Result</code> type from the <code>windows::core</code> module that provides Windows error handling to simplify the following API calls. And with that, we can call the <code>CreateUri</code> function as follows:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>let uri = CreateUri(w!(&quot;http://kennykerr.ca&quot;), Uri_CREATE_CANONICALIZE, 0)?;
-<span class="boring">}</span></code></pre></pre>
-<p>There's quite a lot going on here. The first parameter is actually a <code>PCWSTR</code>, representing a null-terminated wide string used by many Windows APIs. The <code>windows</code> crate provides the handy <code>w!</code> macro for creating a valid null-terminated wide string as a compile-time constant. The second parameter is just the default flag specified by the official documentation. The third parameter is reserved and should thus be zero.</p>
-<p>The resulting <code>IUri</code> object has various methods that we can now use to inspect the URI. The <a href="https://learn.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/platform-apis/ms775038(v=vs.85)">official documentation</a> describes the various interface methods and <a href="https://microsoft.github.io/windows-docs-rs/doc/windows/Win32/System/Com/struct.IUri.html">the Rust docs</a> give you a quick glimpse at their various signatures so that you can quickly figure out how to call them in Rust. For this example, let’s just call two of them to print out the URI's domain and the HTTP port number:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>let domain = uri.GetDomain()?;
-let port = uri.GetPort()?;
-
-println!(&quot;{domain} ({port})&quot;);
-<span class="boring">}</span></code></pre></pre>
-<p>Under the hood, those methods will invoke the virtual functions through the COM interface and into the implementation provided by the API. They also provide a bunch of error and signature transformation to make it very natural to use from Rust. And that’s it, running the sample should print something like this:</p>
-<pre><code>kennykerr.ca (80)
-</code></pre>
-<p>Here's the <a href="https://github.com/microsoft/windows-rs/blob/master/crates/samples/windows/com_uri/src/main.rs">full sample for reference</a>.</p>
+<p>By default the <code>link</code> macro will cause the linker to use the bundled import libs. Compiling with the <code>windows_raw_dylib</code> Rust build flag will cause Cargo to skip downloading the import libs altogether and instead use <code>raw-dylib</code> to resolve imports automatically. The Rust compiler will then create the import entries directly. This works without having to change any of your code. Without the <code>windows-targets</code> crate, switching between linker and <code>raw-dylib</code> imports requires very intricate code changes. As of this writing, the <code>raw-dylib</code> feature is not yet stable.</p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="../rust-getting-started/calling-your-first-windows-sys-api.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../rust-getting-started/how-to-query-for-com-interface.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next" href="../rust-getting-started/calling-your-first-winrt-api.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next" href="../rust-getting-started/standalone-code-generation.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -202,11 +197,11 @@ println!(&quot;{domain} ({port})&quot;);
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="../rust-getting-started/calling-your-first-windows-sys-api.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../rust-getting-started/how-to-query-for-com-interface.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next" href="../rust-getting-started/calling-your-first-winrt-api.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next" href="../rust-getting-started/standalone-code-generation.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>

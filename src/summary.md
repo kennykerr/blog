@@ -14,4 +14,5 @@
 - [Calling your first COM API](rust-getting-started/calling-your-first-com-api.md)
 - [Calling your first WinRT API](rust-getting-started/calling-your-first-winrt-api.md)
 - [How do I query for a specific COM interface?](rust-getting-started/how-to-query-for-com-interface.md)
+- [Understanding the windows-targets crate](rust-getting-started/understanding-windows-targets.md)
 - [Standalone code generation](rust-getting-started/standalone-code-generation.md)
