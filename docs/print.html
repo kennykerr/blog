@@ -33,6 +33,7 @@
 
     </head>
     <body>
+    <div id="body-container">
         <!-- Provide site root to javascript -->
         <script>
             var path_to_root = "";
@@ -70,10 +71,12 @@
         <!-- Hide / unhide sidebar before it is displayed -->
         <script>
             var html = document.querySelector('html');
-            var sidebar = 'hidden';
+            var sidebar = null;
             if (document.body.clientWidth >= 1080) {
                 try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
                 sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
             }
             html.classList.remove('sidebar-visible');
             html.classList.add("sidebar-" + sidebar);
@@ -86,11 +89,33 @@
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
 
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
         <div id="page-wrapper" class="page-wrapper">
 
             <div class="page">
                                 <div id="menu-bar-hover-placeholder"></div>
-                <div id="menu-bar" class="menu-bar sticky bordered">
+                <div id="menu-bar" class="menu-bar sticky">
                     <div class="left-buttons">
                         <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
                             <i class="fa fa-bars"></i>
@@ -152,7 +177,7 @@
 <p><a href="https://www.youtube.com/@kennykerrca/videos">Kenny on YouTube</a></p>
 <p><a href="https://www.linkedin.com/in/kennykerr/">Kenny on LinkedIn</a></p>
 <p><a href="https://kennykerrca.wordpress.com/">Kenny's old blog on WordPress</a></p>
-<p><a href="http://web.archive.org/web/20230104081844/https://kennykerr.ca/">Kenny on the Wayback Machine</a></p>
+<p><a href="https://weblogs.asp.net/kennykerr">Kenny's old blog on asp.net</a></p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="getting-started-with-rust"><a class="header" href="#getting-started-with-rust">Getting Started with Rust</a></h1>
 <p>The <a href="https://github.com/microsoft/windows-rs">windows-rs</a> project has been available for some time and while I still have a great deal of work left to do, I thought I should start spending some time writing about Rust for Windows and not simply building Rust for Windows. 😊 As I did for <a href="https://github.com/microsoft/cppwinrt">C++/WinRT</a>, I thought I would start writing a few short &quot;how to&quot; or &quot;how it works&quot; articles to help developers understand some of the fundamentals of the <a href="https://github.com/microsoft/windows-rs">windows-rs</a> project.</p>
 <p>Some of these topics will be obvious for Rust developers but perhaps not the Windows developer new to Rust. Other topics might be obvious to Windows developers but less so to the seasoned Rust developer new to Windows. Either way, I hope you find it useful. Feel free to <a href="https://github.com/microsoft/windows-rs/issues">open an issue on the repo</a> if you have any questions.</p>
@@ -585,5 +610,6 @@ fn main() {
         });
         </script>
 
+    </div>
     </body>
 </html>
