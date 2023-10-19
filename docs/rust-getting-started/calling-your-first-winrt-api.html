@@ -170,8 +170,8 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="calling-your-first-winrt-api"><a class="header" href="#calling-your-first-winrt-api">Calling your first WinRT API</a></h1>
-<p>Windows 8 introduced the Windows Runtime, which at its heart, is just COM with a few more conventions thrown in to make language bindings appear more seamless. The <a href="https://crates.io/crates/windows">windows</a> crate already makes calling COM APIs far more seamless than it is for C++ developers, but WinRT goes further by providing first-class support for modeling things like constructors, events, and class hierarchies. In <a href="calling-your-first-com-api.html">calling your first COM API</a>, we saw that you still had to bootsrap the API with a C-style DLL export before calling COM interface methods. WinRT works the same way but abstracts this away in a generalized manner. </p>
-<p>Let’s use a simple example to illustrate. The <code>XmlDocument</code> &quot;class&quot; models an XML document that can be loaded from various sources. The Rust <a href="https://microsoft.github.io/windows-docs-rs/doc/windows/Data/Xml/Dom/struct.XmlDocument.html">docs for the windows crate</a> indicate that this type resides in the <code>Data::Xml::Dom</code> module so we can configure our <code>windows</code> crate dependency as follows:</p>
+<p>Windows 8 introduced the Windows Runtime, which at its heart, is just COM with a few more conventions thrown in to make language bindings appear more seamless. The <a href="https://crates.io/crates/windows">windows</a> crate already makes calling COM APIs far more seamless than it is for C++ developers, but WinRT goes further by providing first-class support for modeling things like constructors, events, and class hierarchies. In <a href="calling-your-first-com-api.html">calling your first COM API</a>, we saw that you still had to bootstrap the API with a C-style DLL export before calling COM interface methods. WinRT works the same way but abstracts this away in a generalized manner. </p>
+<p>Let's use a simple example to illustrate. The <code>XmlDocument</code> &quot;class&quot; models an XML document that can be loaded from various sources. The Rust <a href="https://microsoft.github.io/windows-docs-rs/doc/windows/Data/Xml/Dom/struct.XmlDocument.html">docs for the windows crate</a> indicate that this type resides in the <code>Data::Xml::Dom</code> module so we can configure our <code>windows</code> crate dependency as follows:</p>
 <pre><code>[dependencies.windows]
 version = &quot;0.48&quot; 
 features = [
@@ -188,7 +188,7 @@ features = [
 
     Ok(())
 }</code></pre></pre>
-<p>You'll notice that unlike the previous Win32 and COM examples, this <code>main</code> function does not need an <code>unsafe</code> block since WinRT calls are assumed to be safe thanks to its more constrained type-system.</p>
+<p>Unlike the previous Win32 and COM examples, you'll notice that this <code>main</code> function does not need an <code>unsafe</code> block since WinRT calls are assumed to be safe thanks to its more constrained type-system.</p>
 <p>To begin, we can simply call the <code>new</code> method to create a new <code>XmlDocument</code> object:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -206,7 +206,7 @@ features = [
 assert!(root.NodeName()? == &quot;html&quot;);
 println!(&quot;{}&quot;, root.InnerText()?);
 <span class="boring">}</span></code></pre></pre>
-<p>First we assert that the element's name is in fact &quot;html&quot; and then print out the element's inner text. As with the previous COM example, those methods all invoke virtual functions through COM interfaces, but the <code>windows</code> crate makes it very simple to make such calls directly from Rust. And that's it, running the sample should print something like this:</p>
+<p>First we assert that the element's name is in fact &quot;html&quot; and then print out the element's inner text. As with the previous COM example, those methods all invoke virtual functions through COM interfaces, but the <code>windows</code> crate makes it very simple to make such calls directly from Rust. And that's it. Running the sample should print something like this:</p>
 <pre><code>hello world
 </code></pre>
 <p>Here's the <a href="https://github.com/microsoft/windows-rs/blob/master/crates/samples/windows/xml/src/main.rs">full sample for reference</a>.</p>

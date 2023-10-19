@@ -171,14 +171,14 @@
                     <main>
                         <h1 id="calling-your-first-com-api"><a class="header" href="#calling-your-first-com-api">Calling your first COM API</a></h1>
 <p>COM APIs are unique in that they expose functionality through interfaces. An interface is just a collection of virtual function pointers grouped together in what is known as a vtable, or virtual function table. This is not something that Rust supports directly, like C++ does, but the <a href="https://crates.io/crates/windows">windows</a> crate provides the necessary code gen to make it possible and seamless. A COM API will still typically start life through a traditional C-style function call in order to get your hands on a COM interface. From there you might call other methods via the interface. </p>
-<p>Some COM-based APIs can get real complicated so let’s start with a very simple example. The <code>CreateUri</code> function is <a href="https://learn.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/platform-apis/ms775098(v=vs.85)">officially documented on MSDN</a> as returning the <code>IUri</code> interface representing the results of parsing the given URI. The Rust <a href="https://microsoft.github.io/windows-docs-rs/doc/windows/Win32/System/Com/fn.CreateUri.html">docs for the windows crate</a> indicate that it resides in the <code>Win32::System::Com</code> module so we can configure our <code>windows</code> crate dependency accordingly:</p>
+<p>Some COM-based APIs can get real complicated so let's start with a very simple example. The <code>CreateUri</code> function is <a href="https://learn.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/platform-apis/ms775098(v=vs.85)">officially documented on MSDN</a> as returning the <code>IUri</code> interface representing the results of parsing the given URI. The Rust <a href="https://microsoft.github.io/windows-docs-rs/doc/windows/Win32/System/Com/fn.CreateUri.html">docs for the windows crate</a> indicate that it resides in the <code>Win32::System::Com</code> module so we can configure our <code>windows</code> crate dependency accordingly:</p>
 <pre><code>[dependencies.windows]
 version = &quot;0.48&quot;
 features = [
     &quot;Win32_System_Com&quot;,
 ]
 </code></pre>
-<p>And we can employ a <code>use</code> declaration to make this API a little more accessible. The <code>windows</code> crate's <code>core</code> module also provides a few helpers to make it easier to work with COM interfaces, so we’ll include that as well:</p>
+<p>And we can employ a <code>use</code> declaration to make this API a little more accessible. The <code>windows</code> crate's <code>core</code> module also provides a few helpers to make it easier to work with COM interfaces, so we'll include that as well:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>use windows::{core::*, Win32::System::Com::*};
@@ -196,7 +196,7 @@ features = [
 </span>let uri = CreateUri(w!(&quot;http://kennykerr.ca&quot;), Uri_CREATE_CANONICALIZE, 0)?;
 <span class="boring">}</span></code></pre></pre>
 <p>There's quite a lot going on here. The first parameter is actually a <code>PCWSTR</code>, representing a null-terminated wide string used by many Windows APIs. The <code>windows</code> crate provides the handy <code>w!</code> macro for creating a valid null-terminated wide string as a compile-time constant. The second parameter is just the default flag specified by the official documentation. The third parameter is reserved and should thus be zero.</p>
-<p>The resulting <code>IUri</code> object has various methods that we can now use to inspect the URI. The <a href="https://learn.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/platform-apis/ms775038(v=vs.85)">official documentation</a> describes the various interface methods and <a href="https://microsoft.github.io/windows-docs-rs/doc/windows/Win32/System/Com/struct.IUri.html">the Rust docs</a> give you a quick glimpse at their various signatures so that you can quickly figure out how to call them in Rust. For this example, let’s just call two of them to print out the URI's domain and the HTTP port number:</p>
+<p>The resulting <code>IUri</code> object has various methods that we can now use to inspect the URI. The <a href="https://learn.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/platform-apis/ms775038(v=vs.85)">official documentation</a> describes the various interface methods and <a href="https://microsoft.github.io/windows-docs-rs/doc/windows/Win32/System/Com/struct.IUri.html">the Rust docs</a> give you a quick glimpse at their various signatures so that you can quickly figure out how to call them in Rust. For this example, let's just call two of them to print out the URI's domain and the HTTP port number:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>let domain = uri.GetDomain()?;
@@ -204,7 +204,7 @@ let port = uri.GetPort()?;
 
 println!(&quot;{domain} ({port})&quot;);
 <span class="boring">}</span></code></pre></pre>
-<p>Under the hood, those methods will invoke the virtual functions through the COM interface and into the implementation provided by the API. They also provide a bunch of error and signature transformation to make it very natural to use from Rust. And that’s it, running the sample should print something like this:</p>
+<p>Under the hood, those methods will invoke the virtual functions through the COM interface and into the implementation provided by the API. They also provide a bunch of error and signature transformation to make it very natural to use from Rust. And that's it, running the sample should print something like this:</p>
 <pre><code>kennykerr.ca (80)
 </code></pre>
 <p>Here's the <a href="https://github.com/microsoft/windows-rs/blob/master/crates/samples/windows/com_uri/src/main.rs">full sample for reference</a>.</p>

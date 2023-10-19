@@ -2,7 +2,7 @@
 
 Windows 8 introduced the Windows Runtime, which at its heart, is just COM with a few more conventions thrown in to make language bindings appear more seamless. The [windows](https://crates.io/crates/windows) crate already makes calling COM APIs far more seamless than it is for C++ developers, but WinRT goes further by providing first-class support for modeling things like constructors, events, and class hierarchies. In [calling your first COM API](calling-your-first-com-api.md), we saw that you still had to bootstrap the API with a C-style DLL export before calling COM interface methods. WinRT works the same way but abstracts this away in a generalized manner. 
 
-Let’s use a simple example to illustrate. The `XmlDocument` "class" models an XML document that can be loaded from various sources. The Rust [docs for the windows crate](https://microsoft.github.io/windows-docs-rs/doc/windows/Data/Xml/Dom/struct.XmlDocument.html) indicate that this type resides in the `Data::Xml::Dom` module so we can configure our `windows` crate dependency as follows:
+Let's use a simple example to illustrate. The `XmlDocument` "class" models an XML document that can be loaded from various sources. The Rust [docs for the windows crate](https://microsoft.github.io/windows-docs-rs/doc/windows/Data/Xml/Dom/struct.XmlDocument.html) indicate that this type resides in the `Data::Xml::Dom` module so we can configure our `windows` crate dependency as follows:
 
 ```
 [dependencies.windows]
