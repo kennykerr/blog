@@ -1,6 +1,6 @@
 # Calling your first WinRT API
 
-Windows 8 introduced the Windows Runtime, which at its heart, is just COM with a few more conventions thrown in to make language bindings appear more seamless. The [windows](https://crates.io/crates/windows) crate already makes calling COM APIs far more seamless than it is for C++ developers, but WinRT goes further by providing first-class support for modeling things like constructors, events, and class hierarchies. In [calling your first COM API](calling-your-first-com-api.md), we saw that you still had to bootsrap the API with a C-style DLL export before calling COM interface methods. WinRT works the same way but abstracts this away in a generalized manner. 
+Windows 8 introduced the Windows Runtime, which at its heart, is just COM with a few more conventions thrown in to make language bindings appear more seamless. The [windows](https://crates.io/crates/windows) crate already makes calling COM APIs far more seamless than it is for C++ developers, but WinRT goes further by providing first-class support for modeling things like constructors, events, and class hierarchies. In [calling your first COM API](calling-your-first-com-api.md), we saw that you still had to bootstrap the API with a C-style DLL export before calling COM interface methods. WinRT works the same way but abstracts this away in a generalized manner. 
 
 Let’s use a simple example to illustrate. The `XmlDocument` "class" models an XML document that can be loaded from various sources. The Rust [docs for the windows crate](https://microsoft.github.io/windows-docs-rs/doc/windows/Data/Xml/Dom/struct.XmlDocument.html) indicate that this type resides in the `Data::Xml::Dom` module so we can configure our `windows` crate dependency as follows:
 
@@ -27,7 +27,7 @@ fn main() -> Result<()> {
 }
 ```
 
-You'll notice that unlike the previous Win32 and COM examples, this `main` function does not need an `unsafe` block since WinRT calls are assumed to be safe thanks to its more constrained type-system.
+Unlike the previous Win32 and COM examples, you'll notice that this `main` function does not need an `unsafe` block since WinRT calls are assumed to be safe thanks to its more constrained type-system.
 
 To begin, we can simply call the `new` method to create a new `XmlDocument` object:
 
@@ -49,7 +49,7 @@ assert!(root.NodeName()? == "html");
 println!("{}", root.InnerText()?);
 ```
 
-First we assert that the element's name is in fact "html" and then print out the element's inner text. As with the previous COM example, those methods all invoke virtual functions through COM interfaces, but the `windows` crate makes it very simple to make such calls directly from Rust. And that's it, running the sample should print something like this:
+First we assert that the element's name is in fact "html" and then print out the element's inner text. As with the previous COM example, those methods all invoke virtual functions through COM interfaces, but the `windows` crate makes it very simple to make such calls directly from Rust. And that's it. Running the sample should print something like this:
 
 ```
 hello world
