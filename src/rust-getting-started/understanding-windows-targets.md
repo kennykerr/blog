@@ -20,13 +20,13 @@ Start by adding the following to your Cargo.toml file:
 
 ```toml
 [dependencies.windows-targets]
-version = "0.48"
+version = "0.52"
 ```
 
 Use the `link` macro to define the external functions you wish to call:
 
 ```rust
-windows_targets::link!("kernel32.dll" "system" fn SetLastError(code: u32) -> ());
+windows_targets::link!("kernel32.dll" "system" fn SetLastError(code: u32));
 windows_targets::link!("kernel32.dll" "system" fn GetLastError() -> u32);
 ```
 

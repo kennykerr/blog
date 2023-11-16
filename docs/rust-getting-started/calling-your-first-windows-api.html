@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html lang="en" class="sidebar-visible no-js light">
+<html lang="en" class="light" dir="ltr">
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
@@ -11,7 +11,7 @@
 
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="theme-color" content="#ffffff" />
+        <meta name="theme-color" content="#ffffff">
 
         <link rel="icon" href="../favicon.svg">
         <link rel="stylesheet" href="../css/variables.css">
@@ -31,7 +31,7 @@
         <!-- Custom theme stylesheets -->
 
     </head>
-    <body>
+    <body class="sidebar-visible no-js">
     <div id="body-container">
         <!-- Provide site root to javascript -->
         <script>
@@ -61,24 +61,29 @@
             try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
             if (theme === null || theme === undefined) { theme = default_theme; }
             var html = document.querySelector('html');
-            html.classList.remove('no-js')
             html.classList.remove('light')
             html.classList.add(theme);
-            html.classList.add('js');
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
         </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
 
         <!-- Hide / unhide sidebar before it is displayed -->
         <script>
-            var html = document.querySelector('html');
+            var body = document.querySelector('body');
             var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
             if (document.body.clientWidth >= 1080) {
                 try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
                 sidebar = sidebar || 'visible';
             } else {
                 sidebar = 'hidden';
             }
-            html.classList.remove('sidebar-visible');
-            html.classList.add("sidebar-" + sidebar);
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
@@ -116,9 +121,9 @@
                                 <div id="menu-bar-hover-placeholder"></div>
                 <div id="menu-bar" class="menu-bar sticky">
                     <div class="left-buttons">
-                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
                             <i class="fa fa-bars"></i>
-                        </button>
+                        </label>
                         <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
                             <i class="fa fa-paint-brush"></i>
                         </button>
@@ -173,7 +178,7 @@
 <p>So you want to get a feel for calling a simple Windows API. Where to start? Let's look at a relatively simple API for submitting callbacks to the thread pool. You can read <a href="https://learn.microsoft.com/en-us/archive/msdn-magazine/2011/august/windows-with-c-the-windows-thread-pool-and-work">more about this API here</a>.</p>
 <p>The first step is to add a dependency on the <a href="https://crates.io/crates/windows">windows</a> crate and indicate which features you'd like to access:</p>
 <pre><code>[dependencies.windows]
-version = &quot;0.48&quot;
+version = &quot;0.52&quot;
 features = [
     &quot;Win32_Foundation&quot;,
     &quot;Win32_System_Threading&quot;,
@@ -183,7 +188,7 @@ features = [
 <p>Cargo will now handle the heavy lifting, tracking down the dependencies and making sure the import libs are present, so that we can simply call these APIs in Rust without any further configuration. We can employ a <code>use</code> declaration to make these APIs a little more accessible:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>use windows::{Win32::Foundation::*, Win32::System::Threading::*};
+</span>use windows::{core::Result, Win32::System::Threading::*};
 <span class="boring">}</span></code></pre></pre>
 <p>In order to &quot;prove&quot; that the code works and yet keep it real simple let's just use the thread pool to increment a counter some number of times. Here we can use a reader-writer lock for safe and multi-threaded access to the counter variable:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
@@ -191,33 +196,23 @@ features = [
 </span>static COUNTER: std::sync::RwLock&lt;i32&gt; = std::sync::RwLock::new(0);
 <span class="boring">}</span></code></pre></pre>
 <p>For this example, I'll just use a simple <code>main</code> function with a big <code>unsafe</code> block since virtually everything here is going to be <code>unsafe</code>. Why is that? Well the <code>windows</code> crate lets you call foreign functions and these are generally assumed to be <code>unsafe</code>. </p>
-<pre><pre class="playground"><code class="language-rust">fn main() {
+<pre><pre class="playground"><code class="language-rust">fn main() -&gt; Result&lt;()&gt; {
     unsafe {
         
     }
+
+    Ok(())
 }</code></pre></pre>
 <p>The thread pool API is modeled as a set of &quot;objects&quot; exposed via a traditional C-style API. The first thing we need to do is create a work object:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>let work = CreateThreadpoolWork(Some(callback), None, None);
+</span>let work = CreateThreadpoolWork(Some(callback), None, None)?;
 <span class="boring">}</span></code></pre></pre>
 <p>The first parameter is a pointer to a callback function. The remaining parameters are optional and you can read more about them in my thread pool series on MSDN.</p>
-<p>Since this function allocates memory, it is possible that it might fail, and this is indicated by returning a null pointer rather than a valid work object handle. We'll check for this condition and call the <code>GetLastError</code> function to display any relevant error code:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>if work.is_null() {
-    println!(&quot;{:?}&quot;, GetLastError());
-    return;
-}
-<span class="boring">}</span></code></pre></pre>
 <p>The callback itself must be a valid C-style callback according to the signature expected by the thread pool API. Here's a simple callback that will increment the count:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>extern &quot;system&quot; fn callback(
-    _: *mut TP_CALLBACK_INSTANCE,
-    _: *mut std::ffi::c_void,
-    _: *mut TP_WORK,
-) {
+</span>extern &quot;system&quot; fn callback(_: PTP_CALLBACK_INSTANCE, _: *mut std::ffi::c_void, _: PTP_WORK) {
     let mut counter = COUNTER.write().unwrap();
     *counter += 1;
 }
@@ -258,7 +253,7 @@ println!(&quot;counter: {}&quot;, *counter);
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next" href="../rust-getting-started/calling-your-first-windows-sys-api.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="../rust-getting-started/calling-your-first-windows-sys-api.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -272,7 +267,7 @@ println!(&quot;counter: {}&quot;, *counter);
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next" href="../rust-getting-started/calling-your-first-windows-sys-api.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="../rust-getting-started/calling-your-first-windows-sys-api.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>

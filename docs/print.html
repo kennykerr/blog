@@ -1,10 +1,10 @@
 <!DOCTYPE HTML>
-<html lang="en" class="sidebar-visible no-js light">
+<html lang="en" class="light" dir="ltr">
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
         <title>Kenny Kerr</title>
-        <meta name="robots" content="noindex" />
+        <meta name="robots" content="noindex">
 
 
         <!-- Custom HTML head -->
@@ -12,7 +12,7 @@
 
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="theme-color" content="#ffffff" />
+        <meta name="theme-color" content="#ffffff">
 
         <link rel="icon" href="favicon.svg">
         <link rel="stylesheet" href="css/variables.css">
@@ -32,7 +32,7 @@
         <!-- Custom theme stylesheets -->
 
     </head>
-    <body>
+    <body class="sidebar-visible no-js">
     <div id="body-container">
         <!-- Provide site root to javascript -->
         <script>
@@ -62,24 +62,29 @@
             try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
             if (theme === null || theme === undefined) { theme = default_theme; }
             var html = document.querySelector('html');
-            html.classList.remove('no-js')
             html.classList.remove('light')
             html.classList.add(theme);
-            html.classList.add('js');
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
         </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
 
         <!-- Hide / unhide sidebar before it is displayed -->
         <script>
-            var html = document.querySelector('html');
+            var body = document.querySelector('body');
             var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
             if (document.body.clientWidth >= 1080) {
                 try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
                 sidebar = sidebar || 'visible';
             } else {
                 sidebar = 'hidden';
             }
-            html.classList.remove('sidebar-visible');
-            html.classList.add("sidebar-" + sidebar);
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
@@ -117,9 +122,9 @@
                                 <div id="menu-bar-hover-placeholder"></div>
                 <div id="menu-bar" class="menu-bar sticky">
                     <div class="left-buttons">
-                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
                             <i class="fa fa-bars"></i>
-                        </button>
+                        </label>
                         <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
                             <i class="fa fa-paint-brush"></i>
                         </button>
@@ -190,10 +195,10 @@
 <tr><td>You need <code>no_std</code> support</td><td></td><td>✅</td></tr>
 <tr><td>You need COM or WinRT support</td><td>✅</td><td></td></tr>
 <tr><td>You would prefer to use APIs that feel idiomatic to Rust</td><td>✅</td><td></td></tr>
-<tr><td>Minimum supported Rust version</td><td>1.56</td><td>1.48</td></tr>
+<tr><td>Minimum supported Rust version</td><td>1.56</td><td>1.56</td></tr>
 </tbody></table>
 </div><div style="break-before: page; page-break-before: always;"></div><h1 id="how-are-these-crates-built"><a class="header" href="#how-are-these-crates-built">How are these crates built?</a></h1>
-<p>The <a href="https://crates.io/crates/windows">windows</a> and <a href="https://crates.io/crates/windows-sys">windows-sys</a> crates are generated from metadata describing the Windows API. Originally only WinRT APIs included metadata, but metadata is now provided for older C and COM APIs as well. The <a href="https://github.com/microsoft/win32metadata/">win32metadata</a> project provides the tools to produce the metadata and the <a href="https://crates.io/crates/windows-metadata">windows-metadata</a> and <a href="https://crates.io/crates/windows-bindgen">windows-bindgen</a> crates are used to read the metadata and generate the <code>windows</code> and <code>windows-sys</code> crates. The bindings are generated differently based on the differing goals of the respective crates. You can find the exact metadata file used to generate a particular version of the <code>windows</code> and <code>windows-sys</code> crates <a href="https://github.com/microsoft/windows-rs/tree/master/crates/libs/bindgen/default">here</a>.</p>
+<p>The <a href="https://crates.io/crates/windows">windows</a> and <a href="https://crates.io/crates/windows-sys">windows-sys</a> crates are generated from metadata describing the Windows API. Originally only WinRT APIs included metadata, but metadata is now provided for older C and COM APIs as well. The <a href="https://github.com/microsoft/win32metadata/">win32metadata</a> project provides the tools to produce the metadata and the <a href="https://crates.io/crates/windows-metadata">windows-metadata</a> and <a href="https://crates.io/crates/windows-bindgen">windows-bindgen</a> crates are used to read the metadata and generate the <code>windows</code> and <code>windows-sys</code> crates. The bindings are generated differently based on the differing goals of the respective crates. You can find the exact metadata files used to generate a particular version of the <code>windows</code> and <code>windows-sys</code> crates <a href="https://github.com/microsoft/windows-rs/tree/master/crates/libs/bindgen/default">here</a>.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="how-do-i-find-a-particular-api"><a class="header" href="#how-do-i-find-a-particular-api">How do I find a particular API?</a></h1>
 <p>First <a href="rust-getting-started/windows-or-windows-sys.html">pick the crate you would like to use</a>. Then search the documentation for the chosen crate:</p>
 <ul>
@@ -215,7 +220,7 @@
 <p>So you want to get a feel for calling a simple Windows API. Where to start? Let's look at a relatively simple API for submitting callbacks to the thread pool. You can read <a href="https://learn.microsoft.com/en-us/archive/msdn-magazine/2011/august/windows-with-c-the-windows-thread-pool-and-work">more about this API here</a>.</p>
 <p>The first step is to add a dependency on the <a href="https://crates.io/crates/windows">windows</a> crate and indicate which features you'd like to access:</p>
 <pre><code>[dependencies.windows]
-version = &quot;0.48&quot;
+version = &quot;0.52&quot;
 features = [
     &quot;Win32_Foundation&quot;,
     &quot;Win32_System_Threading&quot;,
@@ -225,7 +230,7 @@ features = [
 <p>Cargo will now handle the heavy lifting, tracking down the dependencies and making sure the import libs are present, so that we can simply call these APIs in Rust without any further configuration. We can employ a <code>use</code> declaration to make these APIs a little more accessible:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>use windows::{Win32::Foundation::*, Win32::System::Threading::*};
+</span>use windows::{core::Result, Win32::System::Threading::*};
 <span class="boring">}</span></code></pre></pre>
 <p>In order to &quot;prove&quot; that the code works and yet keep it real simple let's just use the thread pool to increment a counter some number of times. Here we can use a reader-writer lock for safe and multi-threaded access to the counter variable:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
@@ -233,33 +238,23 @@ features = [
 </span>static COUNTER: std::sync::RwLock&lt;i32&gt; = std::sync::RwLock::new(0);
 <span class="boring">}</span></code></pre></pre>
 <p>For this example, I'll just use a simple <code>main</code> function with a big <code>unsafe</code> block since virtually everything here is going to be <code>unsafe</code>. Why is that? Well the <code>windows</code> crate lets you call foreign functions and these are generally assumed to be <code>unsafe</code>. </p>
-<pre><pre class="playground"><code class="language-rust">fn main() {
+<pre><pre class="playground"><code class="language-rust">fn main() -&gt; Result&lt;()&gt; {
     unsafe {
         
     }
+
+    Ok(())
 }</code></pre></pre>
 <p>The thread pool API is modeled as a set of &quot;objects&quot; exposed via a traditional C-style API. The first thing we need to do is create a work object:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>let work = CreateThreadpoolWork(Some(callback), None, None);
+</span>let work = CreateThreadpoolWork(Some(callback), None, None)?;
 <span class="boring">}</span></code></pre></pre>
 <p>The first parameter is a pointer to a callback function. The remaining parameters are optional and you can read more about them in my thread pool series on MSDN.</p>
-<p>Since this function allocates memory, it is possible that it might fail, and this is indicated by returning a null pointer rather than a valid work object handle. We'll check for this condition and call the <code>GetLastError</code> function to display any relevant error code:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>if work.is_null() {
-    println!(&quot;{:?}&quot;, GetLastError());
-    return;
-}
-<span class="boring">}</span></code></pre></pre>
 <p>The callback itself must be a valid C-style callback according to the signature expected by the thread pool API. Here's a simple callback that will increment the count:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>extern &quot;system&quot; fn callback(
-    _: *mut TP_CALLBACK_INSTANCE,
-    _: *mut std::ffi::c_void,
-    _: *mut TP_WORK,
-) {
+</span>extern &quot;system&quot; fn callback(_: PTP_CALLBACK_INSTANCE, _: *mut std::ffi::c_void, _: PTP_WORK) {
     let mut counter = COUNTER.write().unwrap();
     *counter += 1;
 }
@@ -295,7 +290,7 @@ println!(&quot;counter: {}&quot;, *counter);
 <p>So you want to get a feel for calling a simple Windows API. Where to start? Let's look at a relatively simple API for submitting callbacks to the thread pool. You can read <a href="https://learn.microsoft.com/en-us/archive/msdn-magazine/2011/august/windows-with-c-the-windows-thread-pool-and-work">more about this API here</a>.</p>
 <p>The first step is to add a dependency on the <a href="https://crates.io/crates/windows-sys">windows-sys</a> crate and indicate which features you'd like to access:</p>
 <pre><code>[dependencies.windows-sys]
-version = &quot;0.48&quot;
+version = &quot;0.52&quot;
 features = [
     &quot;Win32_Foundation&quot;,
     &quot;Win32_System_Threading&quot;,
@@ -327,7 +322,7 @@ features = [
 <p>Since this function allocates memory, it is possible that it might fail, and this is indicated by returning a null pointer rather than a valid work object handle. We'll check for this condition and call the <code>GetLastError</code> function to display any relevant error code:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>if work.is_null() {
+</span>if work == 0 {
     println!(&quot;{:?}&quot;, GetLastError());
     return;
 }
@@ -335,11 +330,7 @@ features = [
 <p>The callback itself must be a valid C-style callback according to the signature expected by the thread pool API. Here's a simple callback that will increment the count:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>extern &quot;system&quot; fn callback(
-    _: *mut TP_CALLBACK_INSTANCE,
-    _: *mut std::ffi::c_void,
-    _: *mut TP_WORK,
-) {
+</span>extern &quot;system&quot; fn callback(_: PTP_CALLBACK_INSTANCE, _: *mut std::ffi::c_void, _: PTP_WORK) {
     let mut counter = COUNTER.write().unwrap();
     *counter += 1;
 }
@@ -375,7 +366,7 @@ println!(&quot;counter: {}&quot;, *counter);
 <p>COM APIs are unique in that they expose functionality through interfaces. An interface is just a collection of virtual function pointers grouped together in what is known as a vtable, or virtual function table. This is not something that Rust supports directly, like C++ does, but the <a href="https://crates.io/crates/windows">windows</a> crate provides the necessary code gen to make it possible and seamless. A COM API will still typically start life through a traditional C-style function call in order to get your hands on a COM interface. From there you might call other methods via the interface. </p>
 <p>Some COM-based APIs can get real complicated so let's start with a very simple example. The <code>CreateUri</code> function is <a href="https://learn.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/platform-apis/ms775098(v=vs.85)">officially documented on MSDN</a> as returning the <code>IUri</code> interface representing the results of parsing the given URI. The Rust <a href="https://microsoft.github.io/windows-docs-rs/doc/windows/Win32/System/Com/fn.CreateUri.html">docs for the windows crate</a> indicate that it resides in the <code>Win32::System::Com</code> module so we can configure our <code>windows</code> crate dependency accordingly:</p>
 <pre><code>[dependencies.windows]
-version = &quot;0.48&quot;
+version = &quot;0.52&quot;
 features = [
     &quot;Win32_System_Com&quot;,
 ]
@@ -414,7 +405,7 @@ println!(&quot;{domain} ({port})&quot;);
 <p>Windows 8 introduced the Windows Runtime, which at its heart, is just COM with a few more conventions thrown in to make language bindings appear more seamless. The <a href="https://crates.io/crates/windows">windows</a> crate already makes calling COM APIs far more seamless than it is for C++ developers, but WinRT goes further by providing first-class support for modeling things like constructors, events, and class hierarchies. In <a href="rust-getting-started/calling-your-first-com-api.html">calling your first COM API</a>, we saw that you still had to bootstrap the API with a C-style DLL export before calling COM interface methods. WinRT works the same way but abstracts this away in a generalized manner. </p>
 <p>Let's use a simple example to illustrate. The <code>XmlDocument</code> &quot;class&quot; models an XML document that can be loaded from various sources. The Rust <a href="https://microsoft.github.io/windows-docs-rs/doc/windows/Data/Xml/Dom/struct.XmlDocument.html">docs for the windows crate</a> indicate that this type resides in the <code>Data::Xml::Dom</code> module so we can configure our <code>windows</code> crate dependency as follows:</p>
 <pre><code>[dependencies.windows]
-version = &quot;0.48&quot; 
+version = &quot;0.52&quot; 
 features = [
     &quot;Data_Xml_Dom&quot;,
 ]
@@ -517,12 +508,12 @@ println!(&quot;{}&quot;, root.InnerText()?);
 </blockquote>
 <p>Start by adding the following to your Cargo.toml file:</p>
 <pre><code class="language-toml">[dependencies.windows-targets]
-version = &quot;0.48&quot;
+version = &quot;0.52&quot;
 </code></pre>
 <p>Use the <code>link</code> macro to define the external functions you wish to call:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>windows_targets::link!(&quot;kernel32.dll&quot; &quot;system&quot; fn SetLastError(code: u32) -&gt; ());
+</span>windows_targets::link!(&quot;kernel32.dll&quot; &quot;system&quot; fn SetLastError(code: u32));
 windows_targets::link!(&quot;kernel32.dll&quot; &quot;system&quot; fn GetLastError() -&gt; u32);
 <span class="boring">}</span></code></pre></pre>
 <p>Make use of any Windows APIs as needed:</p>
@@ -540,32 +531,35 @@ windows_targets::link!(&quot;kernel32.dll&quot; &quot;system&quot; fn GetLastErr
 </blockquote>
 <p>Start by adding the following to your Cargo.toml file:</p>
 <pre><code class="language-toml">[dependencies.windows-targets]
-version = &quot;0.48&quot;
+version = &quot;0.52&quot;
 
 [dev-dependencies.windows-bindgen]
-version = &quot;0.48&quot;
+version = &quot;0.52&quot;
 </code></pre>
 <p>The <code>windows-bindgen</code> crate is only needed for generating bindings and is thus a dev dependency only. The <a href="https://crates.io/crates/windows-targets">windows-targets</a> crate is a dependency shared by the <code>windows</code> and <code>windows-sys</code> crates and only contains import libs for supported targets. This will ensure that you can link against any Windows API functions you may need. </p>
 <p>Write a test to generate bindings as follows:</p>
 <pre><pre class="playground"><code class="language-rust no_run"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>#[test]
-fn gen_bindings() {
-    let apis = [
+fn bindgen() {
+    let args = [
+        &quot;--out&quot;,
+        &quot;src/bindings.rs&quot;,
+        &quot;--config&quot;,
+        &quot;flatten&quot;,
+        &quot;--filter&quot;,
         &quot;Windows.Win32.System.SystemInformation.GetTickCount&quot;,
     ];
 
-    let bindings = windows_bindgen::standalone(&amp;apis);
-    std::fs::write(&quot;src/bindings.rs&quot;, bindings).unwrap();
+    windows_bindgen::bindgen(args).unwrap();
 }
 <span class="boring">}</span></code></pre></pre>
 <p>Make use of any Windows APIs as needed.</p>
 <pre><code class="language-rust no_run ignore">mod bindings;
-use bindings::*;
 
 fn main() {
     unsafe {
-        println!(&quot;{}&quot;, GetTickCount());
+        println!(&quot;{}&quot;, bindings::GetTickCount());
     }
 }</code></pre>
 

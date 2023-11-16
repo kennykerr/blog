@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html lang="en" class="sidebar-visible no-js light">
+<html lang="en" class="light" dir="ltr">
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
@@ -11,7 +11,7 @@
 
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="theme-color" content="#ffffff" />
+        <meta name="theme-color" content="#ffffff">
 
         <link rel="icon" href="../favicon.svg">
         <link rel="stylesheet" href="../css/variables.css">
@@ -31,7 +31,7 @@
         <!-- Custom theme stylesheets -->
 
     </head>
-    <body>
+    <body class="sidebar-visible no-js">
     <div id="body-container">
         <!-- Provide site root to javascript -->
         <script>
@@ -61,24 +61,29 @@
             try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
             if (theme === null || theme === undefined) { theme = default_theme; }
             var html = document.querySelector('html');
-            html.classList.remove('no-js')
             html.classList.remove('light')
             html.classList.add(theme);
-            html.classList.add('js');
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
         </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
 
         <!-- Hide / unhide sidebar before it is displayed -->
         <script>
-            var html = document.querySelector('html');
+            var body = document.querySelector('body');
             var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
             if (document.body.clientWidth >= 1080) {
                 try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
                 sidebar = sidebar || 'visible';
             } else {
                 sidebar = 'hidden';
             }
-            html.classList.remove('sidebar-visible');
-            html.classList.add("sidebar-" + sidebar);
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
@@ -116,9 +121,9 @@
                                 <div id="menu-bar-hover-placeholder"></div>
                 <div id="menu-bar" class="menu-bar sticky">
                     <div class="left-buttons">
-                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
                             <i class="fa fa-bars"></i>
-                        </button>
+                        </label>
                         <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
                             <i class="fa fa-paint-brush"></i>
                         </button>
@@ -173,7 +178,7 @@
 <p>Windows 8 introduced the Windows Runtime, which at its heart, is just COM with a few more conventions thrown in to make language bindings appear more seamless. The <a href="https://crates.io/crates/windows">windows</a> crate already makes calling COM APIs far more seamless than it is for C++ developers, but WinRT goes further by providing first-class support for modeling things like constructors, events, and class hierarchies. In <a href="calling-your-first-com-api.html">calling your first COM API</a>, we saw that you still had to bootstrap the API with a C-style DLL export before calling COM interface methods. WinRT works the same way but abstracts this away in a generalized manner. </p>
 <p>Let's use a simple example to illustrate. The <code>XmlDocument</code> &quot;class&quot; models an XML document that can be loaded from various sources. The Rust <a href="https://microsoft.github.io/windows-docs-rs/doc/windows/Data/Xml/Dom/struct.XmlDocument.html">docs for the windows crate</a> indicate that this type resides in the <code>Data::Xml::Dom</code> module so we can configure our <code>windows</code> crate dependency as follows:</p>
 <pre><code>[dependencies.windows]
-version = &quot;0.48&quot; 
+version = &quot;0.52&quot; 
 features = [
     &quot;Data_Xml_Dom&quot;,
 ]
@@ -219,7 +224,7 @@ println!(&quot;{}&quot;, root.InnerText()?);
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next" href="../rust-getting-started/how-to-query-for-com-interface.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="../rust-getting-started/how-to-query-for-com-interface.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -233,7 +238,7 @@ println!(&quot;{}&quot;, root.InnerText()?);
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next" href="../rust-getting-started/how-to-query-for-com-interface.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="../rust-getting-started/how-to-query-for-com-interface.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>

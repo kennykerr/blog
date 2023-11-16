@@ -6,7 +6,7 @@ The first step is to add a dependency on the [windows-sys](https://crates.io/cra
 
 ```
 [dependencies.windows-sys]
-version = "0.48"
+version = "0.52"
 features = [
     "Win32_Foundation",
     "Win32_System_Threading",
@@ -48,7 +48,7 @@ The first parameter is a pointer to a callback function. The remaining parameter
 Since this function allocates memory, it is possible that it might fail, and this is indicated by returning a null pointer rather than a valid work object handle. We'll check for this condition and call the `GetLastError` function to display any relevant error code:
 
 ```rust
-if work.is_null() {
+if work == 0 {
     println!("{:?}", GetLastError());
     return;
 }
@@ -57,11 +57,7 @@ if work.is_null() {
 The callback itself must be a valid C-style callback according to the signature expected by the thread pool API. Here's a simple callback that will increment the count:
 
 ```rust
-extern "system" fn callback(
-    _: *mut TP_CALLBACK_INSTANCE,
-    _: *mut std::ffi::c_void,
-    _: *mut TP_WORK,
-) {
+extern "system" fn callback(_: PTP_CALLBACK_INSTANCE, _: *mut std::ffi::c_void, _: PTP_WORK) {
     let mut counter = COUNTER.write().unwrap();
     *counter += 1;
 }

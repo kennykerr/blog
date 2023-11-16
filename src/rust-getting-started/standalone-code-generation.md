@@ -8,10 +8,10 @@ Start by adding the following to your Cargo.toml file:
 
 ```toml
 [dependencies.windows-targets]
-version = "0.48"
+version = "0.52"
 
 [dev-dependencies.windows-bindgen]
-version = "0.48"
+version = "0.52"
 ```
 
 The `windows-bindgen` crate is only needed for generating bindings and is thus a dev dependency only. The [windows-targets](https://crates.io/crates/windows-targets) crate is a dependency shared by the `windows` and `windows-sys` crates and only contains import libs for supported targets. This will ensure that you can link against any Windows API functions you may need. 
@@ -20,13 +20,17 @@ Write a test to generate bindings as follows:
 
 ```rust,no_run
 #[test]
-fn gen_bindings() {
-    let apis = [
+fn bindgen() {
+    let args = [
+        "--out",
+        "src/bindings.rs",
+        "--config",
+        "flatten",
+        "--filter",
         "Windows.Win32.System.SystemInformation.GetTickCount",
     ];
 
-    let bindings = windows_bindgen::standalone(&apis);
-    std::fs::write("src/bindings.rs", bindings).unwrap();
+    windows_bindgen::bindgen(args).unwrap();
 }
 ```
 
@@ -34,11 +38,10 @@ Make use of any Windows APIs as needed.
 
 ```rust,no_run,ignore
 mod bindings;
-use bindings::*;
 
 fn main() {
     unsafe {
-        println!("{}", GetTickCount());
+        println!("{}", bindings::GetTickCount());
     }
 }
 ```
