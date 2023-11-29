@@ -89,7 +89,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="index.html">Introduction</a></li><li class="chapter-item expanded affix "><a href="rust-getting-started/index.html">Getting Started with Rust</a></li><li class="chapter-item expanded "><a href="rust-getting-started/windows-or-windows-sys.html"><strong aria-hidden="true">1.</strong> Choosing between the windows and windows-sys crates</a></li><li class="chapter-item expanded "><a href="rust-getting-started/how-are-crates-built.html"><strong aria-hidden="true">2.</strong> How are these crates built?</a></li><li class="chapter-item expanded "><a href="rust-getting-started/how-to-find-api.html"><strong aria-hidden="true">3.</strong> How do I find a particular API?</a></li><li class="chapter-item expanded "><a href="rust-getting-started/what-apis-are-included.html"><strong aria-hidden="true">4.</strong> What APIs are included?</a></li><li class="chapter-item expanded "><a href="rust-getting-started/where-are-the-macros.html"><strong aria-hidden="true">5.</strong> Where's my favorite macro from the Windows SDK?</a></li><li class="chapter-item expanded "><a href="rust-getting-started/calling-your-first-windows-api.html"><strong aria-hidden="true">6.</strong> Calling your first API with the windows crate</a></li><li class="chapter-item expanded "><a href="rust-getting-started/calling-your-first-windows-sys-api.html"><strong aria-hidden="true">7.</strong> Calling your first API with the windows-sys crate</a></li><li class="chapter-item expanded "><a href="rust-getting-started/calling-your-first-com-api.html"><strong aria-hidden="true">8.</strong> Calling your first COM API</a></li><li class="chapter-item expanded "><a href="rust-getting-started/calling-your-first-winrt-api.html"><strong aria-hidden="true">9.</strong> Calling your first WinRT API</a></li><li class="chapter-item expanded "><a href="rust-getting-started/how-to-query-for-com-interface.html"><strong aria-hidden="true">10.</strong> How do I query for a specific COM interface?</a></li><li class="chapter-item expanded "><a href="rust-getting-started/understanding-windows-targets.html"><strong aria-hidden="true">11.</strong> Understanding the windows-targets crate</a></li><li class="chapter-item expanded "><a href="rust-getting-started/standalone-code-generation.html"><strong aria-hidden="true">12.</strong> Standalone code generation</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="index.html">Introduction</a></li><li class="chapter-item expanded affix "><a href="rust-getting-started/index.html">Getting Started with Rust</a></li><li class="chapter-item expanded "><a href="rust-getting-started/windows-or-windows-sys.html"><strong aria-hidden="true">1.</strong> Choosing between the windows and windows-sys crates</a></li><li class="chapter-item expanded "><a href="rust-getting-started/how-are-crates-built.html"><strong aria-hidden="true">2.</strong> How are these crates built?</a></li><li class="chapter-item expanded "><a href="rust-getting-started/how-to-find-api.html"><strong aria-hidden="true">3.</strong> How do I find a particular API?</a></li><li class="chapter-item expanded "><a href="rust-getting-started/what-apis-are-included.html"><strong aria-hidden="true">4.</strong> What APIs are included?</a></li><li class="chapter-item expanded "><a href="rust-getting-started/where-are-the-macros.html"><strong aria-hidden="true">5.</strong> Where's my favorite macro from the Windows SDK?</a></li><li class="chapter-item expanded "><a href="rust-getting-started/calling-your-first-windows-api.html"><strong aria-hidden="true">6.</strong> Calling your first API with the windows crate</a></li><li class="chapter-item expanded "><a href="rust-getting-started/calling-your-first-windows-sys-api.html"><strong aria-hidden="true">7.</strong> Calling your first API with the windows-sys crate</a></li><li class="chapter-item expanded "><a href="rust-getting-started/calling-your-first-com-api.html"><strong aria-hidden="true">8.</strong> Calling your first COM API</a></li><li class="chapter-item expanded "><a href="rust-getting-started/calling-your-first-winrt-api.html"><strong aria-hidden="true">9.</strong> Calling your first WinRT API</a></li><li class="chapter-item expanded "><a href="rust-getting-started/how-to-query-for-com-interface.html"><strong aria-hidden="true">10.</strong> How do I query for a specific COM interface?</a></li><li class="chapter-item expanded "><a href="rust-getting-started/how-to-implement-com-interface.html"><strong aria-hidden="true">11.</strong> How do I implement an existing COM interface?</a></li><li class="chapter-item expanded "><a href="rust-getting-started/understanding-windows-targets.html"><strong aria-hidden="true">12.</strong> Understanding the windows-targets crate</a></li><li class="chapter-item expanded "><a href="rust-getting-started/standalone-code-generation.html"><strong aria-hidden="true">13.</strong> Standalone code generation</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -219,7 +219,7 @@
 <div style="break-before: page; page-break-before: always;"></div><h1 id="calling-your-first-api-with-the-windows-crate"><a class="header" href="#calling-your-first-api-with-the-windows-crate">Calling your first API with the windows crate</a></h1>
 <p>So you want to get a feel for calling a simple Windows API. Where to start? Let's look at a relatively simple API for submitting callbacks to the thread pool. You can read <a href="https://learn.microsoft.com/en-us/archive/msdn-magazine/2011/august/windows-with-c-the-windows-thread-pool-and-work">more about this API here</a>.</p>
 <p>The first step is to add a dependency on the <a href="https://crates.io/crates/windows">windows</a> crate and indicate which features you'd like to access:</p>
-<pre><code>[dependencies.windows]
+<pre><code class="language-toml">[dependencies.windows]
 version = &quot;0.52&quot;
 features = [
     &quot;Win32_Foundation&quot;,
@@ -289,7 +289,7 @@ println!(&quot;counter: {}&quot;, *counter);
 <div style="break-before: page; page-break-before: always;"></div><h1 id="calling-your-first-api-with-the-windows-sys-crate"><a class="header" href="#calling-your-first-api-with-the-windows-sys-crate">Calling your first API with the windows-sys crate</a></h1>
 <p>So you want to get a feel for calling a simple Windows API. Where to start? Let's look at a relatively simple API for submitting callbacks to the thread pool. You can read <a href="https://learn.microsoft.com/en-us/archive/msdn-magazine/2011/august/windows-with-c-the-windows-thread-pool-and-work">more about this API here</a>.</p>
 <p>The first step is to add a dependency on the <a href="https://crates.io/crates/windows-sys">windows-sys</a> crate and indicate which features you'd like to access:</p>
-<pre><code>[dependencies.windows-sys]
+<pre><code class="language-toml">[dependencies.windows-sys]
 version = &quot;0.52&quot;
 features = [
     &quot;Win32_Foundation&quot;,
@@ -365,7 +365,7 @@ println!(&quot;counter: {}&quot;, *counter);
 <div style="break-before: page; page-break-before: always;"></div><h1 id="calling-your-first-com-api"><a class="header" href="#calling-your-first-com-api">Calling your first COM API</a></h1>
 <p>COM APIs are unique in that they expose functionality through interfaces. An interface is just a collection of virtual function pointers grouped together in what is known as a vtable, or virtual function table. This is not something that Rust supports directly, like C++ does, but the <a href="https://crates.io/crates/windows">windows</a> crate provides the necessary code gen to make it possible and seamless. A COM API will still typically start life through a traditional C-style function call in order to get your hands on a COM interface. From there you might call other methods via the interface. </p>
 <p>Some COM-based APIs can get real complicated so let's start with a very simple example. The <code>CreateUri</code> function is <a href="https://learn.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/platform-apis/ms775098(v=vs.85)">officially documented on MSDN</a> as returning the <code>IUri</code> interface representing the results of parsing the given URI. The Rust <a href="https://microsoft.github.io/windows-docs-rs/doc/windows/Win32/System/Com/fn.CreateUri.html">docs for the windows crate</a> indicate that it resides in the <code>Win32::System::Com</code> module so we can configure our <code>windows</code> crate dependency accordingly:</p>
-<pre><code>[dependencies.windows]
+<pre><code class="language-toml">[dependencies.windows]
 version = &quot;0.52&quot;
 features = [
     &quot;Win32_System_Com&quot;,
@@ -404,7 +404,7 @@ println!(&quot;{domain} ({port})&quot;);
 <div style="break-before: page; page-break-before: always;"></div><h1 id="calling-your-first-winrt-api"><a class="header" href="#calling-your-first-winrt-api">Calling your first WinRT API</a></h1>
 <p>Windows 8 introduced the Windows Runtime, which at its heart, is just COM with a few more conventions thrown in to make language bindings appear more seamless. The <a href="https://crates.io/crates/windows">windows</a> crate already makes calling COM APIs far more seamless than it is for C++ developers, but WinRT goes further by providing first-class support for modeling things like constructors, events, and class hierarchies. In <a href="rust-getting-started/calling-your-first-com-api.html">calling your first COM API</a>, we saw that you still had to bootstrap the API with a C-style DLL export before calling COM interface methods. WinRT works the same way but abstracts this away in a generalized manner. </p>
 <p>Let's use a simple example to illustrate. The <code>XmlDocument</code> &quot;class&quot; models an XML document that can be loaded from various sources. The Rust <a href="https://microsoft.github.io/windows-docs-rs/doc/windows/Data/Xml/Dom/struct.XmlDocument.html">docs for the windows crate</a> indicate that this type resides in the <code>Data::Xml::Dom</code> module so we can configure our <code>windows</code> crate dependency as follows:</p>
-<pre><code>[dependencies.windows]
+<pre><code class="language-toml">[dependencies.windows]
 version = &quot;0.52&quot; 
 features = [
     &quot;Data_Xml_Dom&quot;,
@@ -443,7 +443,7 @@ println!(&quot;{}&quot;, root.InnerText()?);
 </code></pre>
 <p>Here's the <a href="https://github.com/microsoft/windows-rs/blob/master/crates/samples/windows/xml/src/main.rs">full sample for reference</a>.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="how-do-i-query-for-a-specific-com-interface"><a class="header" href="#how-do-i-query-for-a-specific-com-interface">How do I query for a specific COM interface?</a></h1>
-<p>COM and WinRT interfaces in the <a href="https://crates.io/crates/windows">windows</a> crate implement the <a href="https://microsoft.github.io/windows-docs-rs/doc/windows/core/trait.Interface.html">Interface</a> trait. This trait provides the <code>cast</code> method that will use <code>QueryInterface</code> under the hood to cast the current interface to another interface supported by the object. The <code>cast</code> method returns a <code>Result&lt;T&gt;</code> so that failure can be handled in a natural way in Rust.</p>
+<p>COM and WinRT interfaces in the <a href="https://crates.io/crates/windows">windows</a> crate implement the <a href="https://microsoft.github.io/windows-docs-rs/doc/windows/core/trait.ComInterface.html">ComInterface</a> trait. This trait provides the <code>cast</code> method that will use <code>QueryInterface</code> under the hood to cast the current interface to another interface supported by the object. The <code>cast</code> method returns a <code>Result&lt;T&gt;</code> so that failure can be handled in a natural way in Rust.</p>
 <p>For example, it is often necesary to get the <code>IDXGIDevice</code> interface for a given Direct3D device to interop with other rendering APIs. This is how you might create a swap chain for drawing and presenting to a Direct3D device. Let's imagine a simple function that accepts a Direct3D device and returns the underlying DXGI factory:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -490,6 +490,53 @@ println!(&quot;{}&quot;, root.InnerText()?);
 </code></pre>
 <p>Here's a <a href="https://github.com/microsoft/windows-rs/tree/master/crates/samples/windows/direct2d">more comprehensive DirectX example</a>.</p>
 <p>The <code>cast</code> method works equally well for WinRT classes and interfaces. It is particularly useful for <a href="https://github.com/microsoft/windows-rs/blob/master/crates/samples/windows/uiautomation/src/main.rs">interop with WinRT APIs</a>. </p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="how-do-i-implement-an-existing-com-interface"><a class="header" href="#how-do-i-implement-an-existing-com-interface">How do I implement an existing COM interface?</a></h1>
+<p>In some cases, you may need to implement an existing COM interface rather than simply calling an existing implementation provided by the operating system. This is where the <code>implement</code> feature and macro come in handy. The <a href="https://crates.io/crates/windows">windows</a> crate provides optional implementation support hidden behind the <code>implement</code> feature. Once enabled, the <a href="https://docs.rs/windows-implement/latest/windows_implement/attr.implement.html">implement</a> macro may be used to implement any number of COM interfaces. The macro takes care of implementing <code>IUnknown</code> itself. </p>
+<p>Let's implement a simple interface defined by Windows to illustrate. The <code>IPersist</code> interface is defined in the <code>Win32::System::Com</code> module, so we'll start by adding a dependency on the <code>windows</code> crate and include the <code>Win32_System_Com</code> feature:</p>
+<pre><code class="language-toml">[dependencies.windows]
+version = &quot;0.52&quot;
+features = [
+    &quot;implement&quot;,
+    &quot;Win32_System_Com&quot;,
+]
+</code></pre>
+<p>The <code>implement</code> feature unlocks the implementation support. </p>
+<p>The <code>implement</code> macro is included by the <code>windows::core</code> module so we'll keep things simple by including it all as follows:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use windows::{core::*, Win32::System::Com::*};
+<span class="boring">}</span></code></pre></pre>
+<p>Now its time for the implementation:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[implement(IPersist)]
+struct Persist(GUID);
+<span class="boring">}</span></code></pre></pre>
+<p>The <code>implement</code> macro will provide the necessary implementation for the <code>IUnknown</code> interface's lifetime management and interface discovery for whatever interfaces are included in the attribute. In this case, only <code>IPersist</code> is to be implemented. </p>
+<p>The implementation itself is defined by a trait that follows the <code>&lt;interface name&gt;_Impl</code> pattern and its up to us to implement it for our implementation as follows:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>impl IPersist_Impl for Persist {
+    fn GetClassID(&amp;self) -&gt; Result&lt;GUID&gt; {
+        Ok(self.0)
+    }
+}
+<span class="boring">}</span></code></pre></pre>
+<p>The IPersist interface, originally <a href="https://learn.microsoft.com/en-us/windows/win32/api/objidl/nn-objidl-ipersist">documented here</a>, has a single method that returns a <code>GUID</code>, so we'll just implement it by returning the value contained within our implementation. The <code>window</code> crate and <code>implement</code> macro will take care of the rest by providing the actual COM virtual function call and virtual function table layout needed to turn this into a heap-allocated and reference-counted COM object. </p>
+<p>All that remains is to move, or box, the implementation into the COM implementation provided by the <code>implement</code> macro through the <code>Into</code> trait:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let guid = GUID::new()?;
+let persist: IPersist = Persist(guid).into();
+<span class="boring">}</span></code></pre></pre>
+<p>At this point, we can simply treat <code>persist</code> as the COM object that it is:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let guid2 = unsafe { persist.GetClassID()? };
+assert_eq!(guid, guid2);
+println!(&quot;{:?}&quot;, guid);
+<span class="boring">}</span></code></pre></pre>
+<p>Here's a <a href="https://github.com/microsoft/windows-rs/tree/master/crates/samples/windows/bits">complete example</a>.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="understanding-the-windows-targets-crate"><a class="header" href="#understanding-the-windows-targets-crate">Understanding the windows-targets crate</a></h1>
 <p>The <a href="https://crates.io/crates/windows">windows</a> and <a href="https://crates.io/crates/windows-sys">windows-sys</a> crates depend on the <a href="https://crates.io/crates/windows-targets">windows-targets</a> crate for linker support. The <code>windows-targets</code> crate includes import libs, supports semantic versioning, and optional support for <code>raw-dylib</code>. It provides explicit import libraries for the following targets:</p>
 <ul>

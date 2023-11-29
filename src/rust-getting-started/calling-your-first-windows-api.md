@@ -4,7 +4,7 @@ So you want to get a feel for calling a simple Windows API. Where to start? Let'
 
 The first step is to add a dependency on the [windows](https://crates.io/crates/windows) crate and indicate which features you'd like to access:
 
-```
+```toml
 [dependencies.windows]
 version = "0.52"
 features = [

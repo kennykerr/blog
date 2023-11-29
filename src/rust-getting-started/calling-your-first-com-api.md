@@ -4,7 +4,7 @@ COM APIs are unique in that they expose functionality through interfaces. An int
 
 Some COM-based APIs can get real complicated so let's start with a very simple example. The `CreateUri` function is [officially documented on MSDN](https://learn.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/platform-apis/ms775098(v=vs.85)) as returning the `IUri` interface representing the results of parsing the given URI. The Rust [docs for the windows crate](https://microsoft.github.io/windows-docs-rs/doc/windows/Win32/System/Com/fn.CreateUri.html) indicate that it resides in the `Win32::System::Com` module so we can configure our `windows` crate dependency accordingly:
 
-```
+```toml
 [dependencies.windows]
 version = "0.52"
 features = [

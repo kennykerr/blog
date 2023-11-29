@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Calling your first API with the windows crate - Kenny Kerr</title>
+        <title>How do I implement an existing COM interface? - Kenny Kerr</title>
 
 
         <!-- Custom HTML head -->
@@ -88,7 +88,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../index.html">Introduction</a></li><li class="chapter-item expanded affix "><a href="../rust-getting-started/index.html">Getting Started with Rust</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/windows-or-windows-sys.html"><strong aria-hidden="true">1.</strong> Choosing between the windows and windows-sys crates</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/how-are-crates-built.html"><strong aria-hidden="true">2.</strong> How are these crates built?</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/how-to-find-api.html"><strong aria-hidden="true">3.</strong> How do I find a particular API?</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/what-apis-are-included.html"><strong aria-hidden="true">4.</strong> What APIs are included?</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/where-are-the-macros.html"><strong aria-hidden="true">5.</strong> Where's my favorite macro from the Windows SDK?</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/calling-your-first-windows-api.html" class="active"><strong aria-hidden="true">6.</strong> Calling your first API with the windows crate</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/calling-your-first-windows-sys-api.html"><strong aria-hidden="true">7.</strong> Calling your first API with the windows-sys crate</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/calling-your-first-com-api.html"><strong aria-hidden="true">8.</strong> Calling your first COM API</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/calling-your-first-winrt-api.html"><strong aria-hidden="true">9.</strong> Calling your first WinRT API</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/how-to-query-for-com-interface.html"><strong aria-hidden="true">10.</strong> How do I query for a specific COM interface?</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/how-to-implement-com-interface.html"><strong aria-hidden="true">11.</strong> How do I implement an existing COM interface?</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/understanding-windows-targets.html"><strong aria-hidden="true">12.</strong> Understanding the windows-targets crate</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/standalone-code-generation.html"><strong aria-hidden="true">13.</strong> Standalone code generation</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../index.html">Introduction</a></li><li class="chapter-item expanded affix "><a href="../rust-getting-started/index.html">Getting Started with Rust</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/windows-or-windows-sys.html"><strong aria-hidden="true">1.</strong> Choosing between the windows and windows-sys crates</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/how-are-crates-built.html"><strong aria-hidden="true">2.</strong> How are these crates built?</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/how-to-find-api.html"><strong aria-hidden="true">3.</strong> How do I find a particular API?</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/what-apis-are-included.html"><strong aria-hidden="true">4.</strong> What APIs are included?</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/where-are-the-macros.html"><strong aria-hidden="true">5.</strong> Where's my favorite macro from the Windows SDK?</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/calling-your-first-windows-api.html"><strong aria-hidden="true">6.</strong> Calling your first API with the windows crate</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/calling-your-first-windows-sys-api.html"><strong aria-hidden="true">7.</strong> Calling your first API with the windows-sys crate</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/calling-your-first-com-api.html"><strong aria-hidden="true">8.</strong> Calling your first COM API</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/calling-your-first-winrt-api.html"><strong aria-hidden="true">9.</strong> Calling your first WinRT API</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/how-to-query-for-com-interface.html"><strong aria-hidden="true">10.</strong> How do I query for a specific COM interface?</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/how-to-implement-com-interface.html" class="active"><strong aria-hidden="true">11.</strong> How do I implement an existing COM interface?</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/understanding-windows-targets.html"><strong aria-hidden="true">12.</strong> Understanding the windows-targets crate</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/standalone-code-generation.html"><strong aria-hidden="true">13.</strong> Standalone code generation</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -174,86 +174,63 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="calling-your-first-api-with-the-windows-crate"><a class="header" href="#calling-your-first-api-with-the-windows-crate">Calling your first API with the windows crate</a></h1>
-<p>So you want to get a feel for calling a simple Windows API. Where to start? Let's look at a relatively simple API for submitting callbacks to the thread pool. You can read <a href="https://learn.microsoft.com/en-us/archive/msdn-magazine/2011/august/windows-with-c-the-windows-thread-pool-and-work">more about this API here</a>.</p>
-<p>The first step is to add a dependency on the <a href="https://crates.io/crates/windows">windows</a> crate and indicate which features you'd like to access:</p>
+                        <h1 id="how-do-i-implement-an-existing-com-interface"><a class="header" href="#how-do-i-implement-an-existing-com-interface">How do I implement an existing COM interface?</a></h1>
+<p>In some cases, you may need to implement an existing COM interface rather than simply calling an existing implementation provided by the operating system. This is where the <code>implement</code> feature and macro come in handy. The <a href="https://crates.io/crates/windows">windows</a> crate provides optional implementation support hidden behind the <code>implement</code> feature. Once enabled, the <a href="https://docs.rs/windows-implement/latest/windows_implement/attr.implement.html">implement</a> macro may be used to implement any number of COM interfaces. The macro takes care of implementing <code>IUnknown</code> itself. </p>
+<p>Let's implement a simple interface defined by Windows to illustrate. The <code>IPersist</code> interface is defined in the <code>Win32::System::Com</code> module, so we'll start by adding a dependency on the <code>windows</code> crate and include the <code>Win32_System_Com</code> feature:</p>
 <pre><code class="language-toml">[dependencies.windows]
 version = &quot;0.52&quot;
 features = [
-    &quot;Win32_Foundation&quot;,
-    &quot;Win32_System_Threading&quot;,
+    &quot;implement&quot;,
+    &quot;Win32_System_Com&quot;,
 ]
 </code></pre>
-<p>Why these two features? Well, the thread pool API is defined in the <code>Win32::System::Threading</code> module and we'll also use a handful of definitions from the <code>Win32::Foundation</code> module. If you're unsure, the docs for any given API provide a helpful comment indicating which features are required. For example, here are the docs for <a href="https://microsoft.github.io/windows-docs-rs/doc/windows/Win32/System/Threading/fn.WaitForThreadpoolWorkCallbacks.html">WaitForThreadpoolWorkCallbacks</a> where you can see it depends on both of these features since it is defined in the <code>Win32::System::Threading</code> module and depends on <code>BOOL</code> which is defined in the <code>Win32::Foundation</code> module.</p>
-<p>Cargo will now handle the heavy lifting, tracking down the dependencies and making sure the import libs are present, so that we can simply call these APIs in Rust without any further configuration. We can employ a <code>use</code> declaration to make these APIs a little more accessible:</p>
+<p>The <code>implement</code> feature unlocks the implementation support. </p>
+<p>The <code>implement</code> macro is included by the <code>windows::core</code> module so we'll keep things simple by including it all as follows:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>use windows::{core::Result, Win32::System::Threading::*};
+</span>use windows::{core::*, Win32::System::Com::*};
 <span class="boring">}</span></code></pre></pre>
-<p>In order to &quot;prove&quot; that the code works and yet keep it real simple let's just use the thread pool to increment a counter some number of times. Here we can use a reader-writer lock for safe and multi-threaded access to the counter variable:</p>
+<p>Now its time for the implementation:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>static COUNTER: std::sync::RwLock&lt;i32&gt; = std::sync::RwLock::new(0);
+</span>#[implement(IPersist)]
+struct Persist(GUID);
 <span class="boring">}</span></code></pre></pre>
-<p>For this example, I'll just use a simple <code>main</code> function with a big <code>unsafe</code> block since virtually everything here is going to be <code>unsafe</code>. Why is that? Well the <code>windows</code> crate lets you call foreign functions and these are generally assumed to be <code>unsafe</code>. </p>
-<pre><pre class="playground"><code class="language-rust">fn main() -&gt; Result&lt;()&gt; {
-    unsafe {
-        
+<p>The <code>implement</code> macro will provide the necessary implementation for the <code>IUnknown</code> interface's lifetime management and interface discovery for whatever interfaces are included in the attribute. In this case, only <code>IPersist</code> is to be implemented. </p>
+<p>The implementation itself is defined by a trait that follows the <code>&lt;interface name&gt;_Impl</code> pattern and its up to us to implement it for our implementation as follows:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>impl IPersist_Impl for Persist {
+    fn GetClassID(&amp;self) -&gt; Result&lt;GUID&gt; {
+        Ok(self.0)
     }
-
-    Ok(())
-}</code></pre></pre>
-<p>The thread pool API is modeled as a set of &quot;objects&quot; exposed via a traditional C-style API. The first thing we need to do is create a work object:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>let work = CreateThreadpoolWork(Some(callback), None, None)?;
-<span class="boring">}</span></code></pre></pre>
-<p>The first parameter is a pointer to a callback function. The remaining parameters are optional and you can read more about them in my thread pool series on MSDN.</p>
-<p>The callback itself must be a valid C-style callback according to the signature expected by the thread pool API. Here's a simple callback that will increment the count:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>extern &quot;system&quot; fn callback(_: PTP_CALLBACK_INSTANCE, _: *mut std::ffi::c_void, _: PTP_WORK) {
-    let mut counter = COUNTER.write().unwrap();
-    *counter += 1;
 }
 <span class="boring">}</span></code></pre></pre>
-<p>The parameters can safely be ignored but do come in handy from time to time. At this point, we have a valid work object but nothing is happening yet. In order to kick off some &quot;work&quot;, we need to submit the work object to the thread pool. You can do so as many times as you'd like, so lets go ahead and do it ten times:</p>
+<p>The IPersist interface, originally <a href="https://learn.microsoft.com/en-us/windows/win32/api/objidl/nn-objidl-ipersist">documented here</a>, has a single method that returns a <code>GUID</code>, so we'll just implement it by returning the value contained within our implementation. The <code>window</code> crate and <code>implement</code> macro will take care of the rest by providing the actual COM virtual function call and virtual function table layout needed to turn this into a heap-allocated and reference-counted COM object. </p>
+<p>All that remains is to move, or box, the implementation into the COM implementation provided by the <code>implement</code> macro through the <code>Into</code> trait:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>for _ in 0..10 {
-    SubmitThreadpoolWork(work);
-}
+</span>let guid = GUID::new()?;
+let persist: IPersist = Persist(guid).into();
 <span class="boring">}</span></code></pre></pre>
-<p>You can now expect the callbacks to run concurrently, hence the <code>RwLock</code> above. Of course, with all of that concurrency we need some way to tell when the work is done. That's the job of the <code>WaitForThreadpoolWorkCallbacks</code> function:</p>
+<p>At this point, we can simply treat <code>persist</code> as the COM object that it is:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>WaitForThreadpoolWorkCallbacks(work, false);
+</span>let guid2 = unsafe { persist.GetClassID()? };
+assert_eq!(guid, guid2);
+println!(&quot;{:?}&quot;, guid);
 <span class="boring">}</span></code></pre></pre>
-<p>The second parameter indicates whether we would like to cancel any pending callbacks that have not started to execute. Passing false here thus indicates that we would like the wait function to block until all of the submitted work has completed. At that point, we can safely close the work object to free its memory:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>CloseThreadpoolWork(work);
-<span class="boring">}</span></code></pre></pre>
-<p>And just to prove that it works reliably, we can print out the counter's value:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>let counter = COUNTER.read().unwrap();
-println!(&quot;counter: {}&quot;, *counter);
-<span class="boring">}</span></code></pre></pre>
-<p>Running the sample should print something like this:</p>
-<pre><code>counter: 10
-</code></pre>
-<p>Here's the <a href="https://github.com/microsoft/windows-rs/blob/master/crates/samples/windows/thread_pool_work/src/main.rs">full sample for reference</a>.</p>
+<p>Here's a <a href="https://github.com/microsoft/windows-rs/tree/master/crates/samples/windows/bits">complete example</a>.</p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="../rust-getting-started/where-are-the-macros.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../rust-getting-started/how-to-query-for-com-interface.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next prefetch" href="../rust-getting-started/calling-your-first-windows-sys-api.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="../rust-getting-started/understanding-windows-targets.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -263,11 +240,11 @@ println!(&quot;counter: {}&quot;, *counter);
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="../rust-getting-started/where-are-the-macros.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../rust-getting-started/how-to-query-for-com-interface.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next prefetch" href="../rust-getting-started/calling-your-first-windows-sys-api.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="../rust-getting-started/understanding-windows-targets.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>

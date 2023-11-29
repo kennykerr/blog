@@ -1,6 +1,6 @@
 # How do I query for a specific COM interface?
 
-COM and WinRT interfaces in the [windows](https://crates.io/crates/windows) crate implement the [Interface](https://microsoft.github.io/windows-docs-rs/doc/windows/core/trait.Interface.html) trait. This trait provides the `cast` method that will use `QueryInterface` under the hood to cast the current interface to another interface supported by the object. The `cast` method returns a `Result<T>` so that failure can be handled in a natural way in Rust.
+COM and WinRT interfaces in the [windows](https://crates.io/crates/windows) crate implement the [ComInterface](https://microsoft.github.io/windows-docs-rs/doc/windows/core/trait.ComInterface.html) trait. This trait provides the `cast` method that will use `QueryInterface` under the hood to cast the current interface to another interface supported by the object. The `cast` method returns a `Result<T>` so that failure can be handled in a natural way in Rust.
 
 For example, it is often necesary to get the `IDXGIDevice` interface for a given Direct3D device to interop with other rendering APIs. This is how you might create a swap chain for drawing and presenting to a Direct3D device. Let's imagine a simple function that accepts a Direct3D device and returns the underlying DXGI factory:
 

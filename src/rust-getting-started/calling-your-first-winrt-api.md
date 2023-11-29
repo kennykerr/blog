@@ -4,7 +4,7 @@ Windows 8 introduced the Windows Runtime, which at its heart, is just COM with a
 
 Let's use a simple example to illustrate. The `XmlDocument` "class" models an XML document that can be loaded from various sources. The Rust [docs for the windows crate](https://microsoft.github.io/windows-docs-rs/doc/windows/Data/Xml/Dom/struct.XmlDocument.html) indicate that this type resides in the `Data::Xml::Dom` module so we can configure our `windows` crate dependency as follows:
 
-```
+```toml
 [dependencies.windows]
 version = "0.52" 
 features = [
