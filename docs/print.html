@@ -89,7 +89,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="index.html">Introduction</a></li><li class="chapter-item expanded affix "><a href="rust-getting-started/index.html">Getting Started with Rust</a></li><li class="chapter-item expanded "><a href="rust-getting-started/windows-or-windows-sys.html"><strong aria-hidden="true">1.</strong> Choosing between the windows and windows-sys crates</a></li><li class="chapter-item expanded "><a href="rust-getting-started/how-are-crates-built.html"><strong aria-hidden="true">2.</strong> How are these crates built?</a></li><li class="chapter-item expanded "><a href="rust-getting-started/how-to-find-api.html"><strong aria-hidden="true">3.</strong> How do I find a particular API?</a></li><li class="chapter-item expanded "><a href="rust-getting-started/what-apis-are-included.html"><strong aria-hidden="true">4.</strong> What APIs are included?</a></li><li class="chapter-item expanded "><a href="rust-getting-started/where-are-the-macros.html"><strong aria-hidden="true">5.</strong> Where's my favorite macro from the Windows SDK?</a></li><li class="chapter-item expanded "><a href="rust-getting-started/calling-your-first-windows-api.html"><strong aria-hidden="true">6.</strong> Calling your first API with the windows crate</a></li><li class="chapter-item expanded "><a href="rust-getting-started/calling-your-first-windows-sys-api.html"><strong aria-hidden="true">7.</strong> Calling your first API with the windows-sys crate</a></li><li class="chapter-item expanded "><a href="rust-getting-started/calling-your-first-com-api.html"><strong aria-hidden="true">8.</strong> Calling your first COM API</a></li><li class="chapter-item expanded "><a href="rust-getting-started/calling-your-first-winrt-api.html"><strong aria-hidden="true">9.</strong> Calling your first WinRT API</a></li><li class="chapter-item expanded "><a href="rust-getting-started/how-to-query-for-com-interface.html"><strong aria-hidden="true">10.</strong> How do I query for a specific COM interface?</a></li><li class="chapter-item expanded "><a href="rust-getting-started/how-to-implement-com-interface.html"><strong aria-hidden="true">11.</strong> How do I implement an existing COM interface?</a></li><li class="chapter-item expanded "><a href="rust-getting-started/understanding-windows-targets.html"><strong aria-hidden="true">12.</strong> Understanding the windows-targets crate</a></li><li class="chapter-item expanded "><a href="rust-getting-started/standalone-code-generation.html"><strong aria-hidden="true">13.</strong> Standalone code generation</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="index.html">Introduction</a></li><li class="chapter-item expanded affix "><a href="rust-getting-started/index.html">Getting Started with Rust</a></li><li class="chapter-item expanded "><a href="rust-getting-started/windows-or-windows-sys.html"><strong aria-hidden="true">1.</strong> Choosing between the windows and windows-sys crates</a></li><li class="chapter-item expanded "><a href="rust-getting-started/how-are-crates-built.html"><strong aria-hidden="true">2.</strong> How are these crates built?</a></li><li class="chapter-item expanded "><a href="rust-getting-started/how-to-find-api.html"><strong aria-hidden="true">3.</strong> How do I find a particular API?</a></li><li class="chapter-item expanded "><a href="rust-getting-started/what-apis-are-included.html"><strong aria-hidden="true">4.</strong> What APIs are included?</a></li><li class="chapter-item expanded "><a href="rust-getting-started/where-are-the-macros.html"><strong aria-hidden="true">5.</strong> Where's my favorite macro from the Windows SDK?</a></li><li class="chapter-item expanded "><a href="rust-getting-started/calling-your-first-windows-api.html"><strong aria-hidden="true">6.</strong> Calling your first API with the windows crate</a></li><li class="chapter-item expanded "><a href="rust-getting-started/calling-your-first-windows-sys-api.html"><strong aria-hidden="true">7.</strong> Calling your first API with the windows-sys crate</a></li><li class="chapter-item expanded "><a href="rust-getting-started/calling-your-first-com-api.html"><strong aria-hidden="true">8.</strong> Calling your first COM API</a></li><li class="chapter-item expanded "><a href="rust-getting-started/calling-your-first-winrt-api.html"><strong aria-hidden="true">9.</strong> Calling your first WinRT API</a></li><li class="chapter-item expanded "><a href="rust-getting-started/how-to-query-for-com-interface.html"><strong aria-hidden="true">10.</strong> How do I query for a specific COM interface?</a></li><li class="chapter-item expanded "><a href="rust-getting-started/how-to-implement-com-interface.html"><strong aria-hidden="true">11.</strong> How do I implement an existing COM interface?</a></li><li class="chapter-item expanded "><a href="rust-getting-started/how-to-implement-winrt-collection.html"><strong aria-hidden="true">12.</strong> How do I create stock collections for WinRT collection interfaces?</a></li><li class="chapter-item expanded "><a href="rust-getting-started/understanding-windows-targets.html"><strong aria-hidden="true">13.</strong> Understanding the windows-targets crate</a></li><li class="chapter-item expanded "><a href="rust-getting-started/standalone-code-generation.html"><strong aria-hidden="true">14.</strong> Standalone code generation</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -537,6 +537,71 @@ assert_eq!(guid, guid2);
 println!(&quot;{:?}&quot;, guid);
 <span class="boring">}</span></code></pre></pre>
 <p>Here's a <a href="https://github.com/microsoft/windows-rs/tree/master/crates/samples/windows/bits">complete example</a>.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="how-do-i-create-stock-collections-for-winrt-collection-interfaces"><a class="header" href="#how-do-i-create-stock-collections-for-winrt-collection-interfaces">How do I create stock collections for WinRT collection interfaces?</a></h1>
+<p>Beyond <a href="rust-getting-started/how-to-implement-com-interface.html">implementing COM interfaces</a> yourself, the <a href="https://crates.io/crates/windows">windows</a> crate provides stock collection implementations for common WinRT collection interfaces. Implementing WinRT collection interfaces can be quite challenging, so this should save you a lot of effort in many cases. The <code>implement</code> feature is required to make use of these stock implementations.</p>
+<p>Let's consider a few examples. The WinRT collection interfaces are all defined in the <code>Foundation::Collections</code> module, so we'll start by adding a dependency on the <code>windows</code> crate and include the <code>Foundation_Collections</code> feature:</p>
+<pre><code class="language-toml">[dependencies.windows]
+version = &quot;0.52&quot;
+features = [
+    &quot;implement&quot;,
+    &quot;Foundation_Collections&quot;,
+]
+</code></pre>
+<p>Creating a collection is as simple as using the <code>TryFrom</code> trait on existing <code>Vec</code> or <code>BTreeMap</code>, depending on the kind of collection:</p>
+<div class="table-wrapper"><table><thead><tr><th>WinRT interface</th><th>From</th></tr></thead><tbody>
+<tr><td><code>IIterable&lt;T&gt;</code></td><td><code>Vec&lt;T::Default&gt;</code></td></tr>
+<tr><td><code>IVectorView&lt;T&gt;</code></td><td><code>Vec&lt;T::Default&gt;</code></td></tr>
+<tr><td><code>IMapView&lt;K, V&gt;</code></td><td><code>BTreeMap&lt;K::Default, V::Default&gt;</code></td></tr>
+</tbody></table>
+</div>
+<p>So if you need a <code>IIterable</code> implementation of <code>i32</code> values you can create it as follows:</p>
+<pre><pre class="playground"><code class="language-rust">use windows::{core::*, Foundation::Collections::*};
+
+fn main() -&gt; Result&lt;()&gt; {
+    let collection = IIterable::&lt;i32&gt;::try_from(vec![1, 2, 3])?;
+
+    for n in collection {
+        println!(&quot;{n}&quot;);
+    }
+
+    Ok(())
+}</code></pre></pre>
+<p>The resulting <code>collection</code> will implement all of the specialized <code>IIterable&lt;i32&gt;</code> methods. </p>
+<p>Did you notice the <code>T::Default</code> in the table above? The challenge is that when the WinRT collection contains nullable types, unlike <code>i32</code>, then the collection must necessarily support a backing implementation that support expressing this. The <code>Default</code> associated type just replaces <code>T</code> with <code>Option&lt;T&gt;</code> for such nullable, or reference, types. </p>
+<p>Let's consider a slightly more contrived example. Here we'll create an <code>IMapView</code> with strings for keys and interfaces for values. WinRT strings are not nullable but interfaces are. WinRT strings are represented by <code>HSTRING</code> in the <code>windows</code> crate and for the interface we'll just use an <code>IStringable</code> implementation:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use windows::Foundation::*;
+
+#[implement(IStringable)]
+struct Value(&amp;'static str);
+
+impl IStringable_Impl for Value {
+    fn ToString(&amp;self) -&gt; Result&lt;HSTRING&gt; {
+        Ok(self.0.into())
+    }
+}
+<span class="boring">}</span></code></pre></pre>
+<p>We can now create a <code>std</code> collection as follows:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use std::collections::*;
+
+let map = BTreeMap::from([
+    (&quot;hello&quot;.into(), Some(Value(&quot;HELLO&quot;).into())),
+    (&quot;hello&quot;.into(), Some(Value(&quot;WORLD&quot;).into())),
+]);
+<span class="boring">}</span></code></pre></pre>
+<p>The Rust compiler naturally infers the exact type: <code>BTreeMap&lt;HSTRING, Option&lt;IStringable&gt;&gt;</code>.</p>
+<p>Finally, we can wrap that <code>BTreeMap</code> inside a WinRT collection with the <code>TryInto</code> trait as follows:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let map: IMapView&lt;HSTRING, IStringable&gt; = map.try_into()?;
+
+for pair in map {
+    println!(&quot;{} - {}&quot;, pair.Key()?, pair.Value()?.ToString()?);
+}
+<span class="boring">}</span></code></pre></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="understanding-the-windows-targets-crate"><a class="header" href="#understanding-the-windows-targets-crate">Understanding the windows-targets crate</a></h1>
 <p>The <a href="https://crates.io/crates/windows">windows</a> and <a href="https://crates.io/crates/windows-sys">windows-sys</a> crates depend on the <a href="https://crates.io/crates/windows-targets">windows-targets</a> crate for linker support. The <code>windows-targets</code> crate includes import libs, supports semantic versioning, and optional support for <code>raw-dylib</code>. It provides explicit import libraries for the following targets:</p>
 <ul>
