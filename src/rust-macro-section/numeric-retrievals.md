@@ -4,18 +4,25 @@ Some of the macros defined in the Win32 SDK are used to take smaller slices of b
 
 ## Getting window `LPARAM` values
 
+There is a surprising pitfall in these functions. It might seem like a good idea to just cast to i32 the first time around, but that might cause the values to be off.
+As pointed out [by Tim Weis in this thread](https://github.com/kennykerr/blog/pull/3#discussion_r1457703408), the compiled result is different and the impact is large
+on 64-bit systems. Specifically [Numeric casts](https://doc.rust-lang.org/reference/expressions/operator-expr.html#numeric-cast) are the problem here.
+The cast to i16 is required because narrowing truncates, so you're certain to get the original value. The i32 cast then sign-extends to make sure the value is unchanged
+thanks to how two's complement works.
+
 ```rs
 /// Get the low order word as a signed 32-bit integer.
 #[inline(always)]
 pub fn get_x_lparam(lp: windows::Win32::Foundation::LPARAM) -> i32 {
-    lp.0 as i32
+    // truncate to i16, sign-extend to i32
+    (lp.0 as i16) as i32
 }
 
 /// Get the high order word as a signed 32-bit integer.
 #[inline(always)]
 pub fn get_y_lparam(lp: windows::Win32::Foundation::LPARAM) -> i32 {
-    // the sign bit is duplicated for right shifts on signed ints
-    (lp.0 >> 16) as i32
+    // shift right, then do the same as for x
+    ((lp.0 >> 16) as i16) as i32
 }
 ```
 
@@ -23,6 +30,7 @@ pub fn get_y_lparam(lp: windows::Win32::Foundation::LPARAM) -> i32 {
 
 Luckily the `DWORD` type in the C++ headers is defined as an unsigned 32-bit integer, and the `WORD` is just an unsigned 16-bit integer. This means we can do some cheap optimizations here without breaking correctness guarantees. The same applies to the `BYTE` type (unsigned char) which is just an `u8` in Rust!
 Additionally, some functions require two `DWORD` arguments for high and low order bytes. These are internally reconstrcuted into a single unsigned 64-bit integer. So these utilities will also include a function for splitting a single `u64` for convenience.
+Luckily, since these are all unsigned, there are no pifalls with sign bits to take into account.
 
 ```rs
 /// Get the low order word as u16
