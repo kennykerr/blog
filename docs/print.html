@@ -89,7 +89,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="index.html">Introduction</a></li><li class="chapter-item expanded affix "><a href="rust-getting-started/index.html">Getting Started with Rust</a></li><li class="chapter-item expanded "><a href="rust-getting-started/windows-or-windows-sys.html"><strong aria-hidden="true">1.</strong> Choosing between the windows and windows-sys crates</a></li><li class="chapter-item expanded "><a href="rust-getting-started/how-are-crates-built.html"><strong aria-hidden="true">2.</strong> How are these crates built?</a></li><li class="chapter-item expanded "><a href="rust-getting-started/how-to-find-api.html"><strong aria-hidden="true">3.</strong> How do I find a particular API?</a></li><li class="chapter-item expanded "><a href="rust-getting-started/what-apis-are-included.html"><strong aria-hidden="true">4.</strong> What APIs are included?</a></li><li class="chapter-item expanded "><a href="rust-getting-started/where-are-the-macros.html"><strong aria-hidden="true">5.</strong> Where's my favorite macro from the Windows SDK?</a></li><li class="chapter-item expanded "><a href="rust-getting-started/calling-your-first-windows-api.html"><strong aria-hidden="true">6.</strong> Calling your first API with the windows crate</a></li><li class="chapter-item expanded "><a href="rust-getting-started/calling-your-first-windows-sys-api.html"><strong aria-hidden="true">7.</strong> Calling your first API with the windows-sys crate</a></li><li class="chapter-item expanded "><a href="rust-getting-started/calling-your-first-com-api.html"><strong aria-hidden="true">8.</strong> Calling your first COM API</a></li><li class="chapter-item expanded "><a href="rust-getting-started/calling-your-first-winrt-api.html"><strong aria-hidden="true">9.</strong> Calling your first WinRT API</a></li><li class="chapter-item expanded "><a href="rust-getting-started/how-to-query-for-com-interface.html"><strong aria-hidden="true">10.</strong> How do I query for a specific COM interface?</a></li><li class="chapter-item expanded "><a href="rust-getting-started/how-to-implement-com-interface.html"><strong aria-hidden="true">11.</strong> How do I implement an existing COM interface?</a></li><li class="chapter-item expanded "><a href="rust-getting-started/how-to-implement-winrt-collection.html"><strong aria-hidden="true">12.</strong> How do I create stock collections for WinRT collection interfaces?</a></li><li class="chapter-item expanded "><a href="rust-getting-started/understanding-windows-targets.html"><strong aria-hidden="true">13.</strong> Understanding the windows-targets crate</a></li><li class="chapter-item expanded "><a href="rust-getting-started/standalone-code-generation.html"><strong aria-hidden="true">14.</strong> Standalone code generation</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="index.html">Introduction</a></li><li class="chapter-item expanded affix "><a href="rust-getting-started/index.html">Getting Started with Rust</a></li><li class="chapter-item expanded "><a href="rust-getting-started/windows-or-windows-sys.html"><strong aria-hidden="true">1.</strong> Choosing between the windows and windows-sys crates</a></li><li class="chapter-item expanded "><a href="rust-getting-started/how-are-crates-built.html"><strong aria-hidden="true">2.</strong> How are these crates built?</a></li><li class="chapter-item expanded "><a href="rust-getting-started/how-to-find-api.html"><strong aria-hidden="true">3.</strong> How do I find a particular API?</a></li><li class="chapter-item expanded "><a href="rust-getting-started/what-apis-are-included.html"><strong aria-hidden="true">4.</strong> What APIs are included?</a></li><li class="chapter-item expanded "><a href="rust-getting-started/where-are-the-macros.html"><strong aria-hidden="true">5.</strong> Where's my favorite macro from the Windows SDK?</a></li><li class="chapter-item expanded "><a href="rust-getting-started/calling-your-first-windows-api.html"><strong aria-hidden="true">6.</strong> Calling your first API with the windows crate</a></li><li class="chapter-item expanded "><a href="rust-getting-started/calling-your-first-windows-sys-api.html"><strong aria-hidden="true">7.</strong> Calling your first API with the windows-sys crate</a></li><li class="chapter-item expanded "><a href="rust-getting-started/calling-your-first-com-api.html"><strong aria-hidden="true">8.</strong> Calling your first COM API</a></li><li class="chapter-item expanded "><a href="rust-getting-started/calling-your-first-winrt-api.html"><strong aria-hidden="true">9.</strong> Calling your first WinRT API</a></li><li class="chapter-item expanded "><a href="rust-getting-started/how-to-query-for-com-interface.html"><strong aria-hidden="true">10.</strong> How do I query for a specific COM interface?</a></li><li class="chapter-item expanded "><a href="rust-getting-started/how-to-implement-com-interface.html"><strong aria-hidden="true">11.</strong> How do I implement an existing COM interface?</a></li><li class="chapter-item expanded "><a href="rust-getting-started/how-to-implement-winrt-collection.html"><strong aria-hidden="true">12.</strong> How do I create stock collections for WinRT collection interfaces?</a></li><li class="chapter-item expanded "><a href="rust-getting-started/understanding-windows-targets.html"><strong aria-hidden="true">13.</strong> Understanding the windows-targets crate</a></li><li class="chapter-item expanded "><a href="rust-getting-started/standalone-code-generation.html"><strong aria-hidden="true">14.</strong> Standalone code generation</a></li><li class="chapter-item expanded "><a href="rust-getting-started/creating-your-first-dll.html"><strong aria-hidden="true">15.</strong> Creating your first DLL in Rust</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -674,6 +674,93 @@ fn main() {
         println!(&quot;{}&quot;, bindings::GetTickCount());
     }
 }</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="creating-your-first-dll-in-rust"><a class="header" href="#creating-your-first-dll-in-rust">Creating your first DLL in Rust</a></h1>
+<p>As a systems programming language with similar linkage support to that of C and C++, it is quite straightforward to build a DLL in Rust. Rust does however have it's own notion of libraries that are quite different to that of C and C++, so it's just a matter of finding the right configuration to produce the desired output.</p>
+<p>As with most Rust projects, you can start with Cargo and get started with a basic template but it's so simple we'll just build it by hand here to see what's involved. Let's create a directory structure as follows:</p>
+<pre><code>&gt; hello_world
+  Cargo.toml
+  &gt; src
+    lib.rs
+</code></pre>
+<p>Just two directories and two files. There's the <code>hello_world</code> directory that contains the project as a whole. In that directory we have a <code>Cargo.toml</code> file that contains metadata for the project or package, information needed to compile the package:</p>
+<pre><code class="language-toml">[package]
+name = &quot;hello_world&quot;
+edition = &quot;2021&quot;
+
+[lib]
+crate-type = [&quot;cdylib&quot;]
+</code></pre>
+<p>At a minimum, the <code>[package]</code> section includes the name and Rust edition your package is compiled with.</p>
+<p>Rust-only libraries don't generally include a <code>[lib]</code>  section. This is necessary when you need to specifically control how the project will be used and linked. In this case, we're using 'cdylib' that represents a dynamic system library and maps to a DLL on Windows.</p>
+<p>The <code>src</code> sub directory contains the <code>lib.rs</code> Rust source file where we can add any functions that we'd like to export from the DLL. Here's a simple example:</p>
+<pre><code>#[no_mangle]
+extern &quot;system&quot; fn HelloWorld() -&gt; i32 {
+    123
+}
+</code></pre>
+<p>The <code>[no_mangle]</code> attribute just tells the compiler to disable any name mangling and use the function name verbatim as the exported identifier. The <code>extern &quot;system&quot;</code> function qualifier indicates the ABI or calling convention expected for the function. The &quot;system&quot; string represents the system-specific calling convention which generally maps to &quot;stdcall&quot; on Windows. </p>
+<p>And that's it! You can now build the package and it will produce a DLL:</p>
+<pre><code>&gt; cargo build -p hello_world
+</code></pre>
+<p>Cargo will drop the resulting binaries in the target directory where you can then use them from any other programming language:</p>
+<pre><code>&gt; dir /b target\debug\hello_world.*
+hello_world.d
+hello_world.dll
+hello_world.dll.exp
+hello_world.dll.lib
+hello_world.pdb
+</code></pre>
+<p>Here's a simple example in C++:</p>
+<pre><code class="language-C++">#include &lt;stdint.h&gt;
+#include &lt;stdio.h&gt;
+
+extern &quot;C&quot; {
+    int32_t __stdcall HelloWorld();
+}
+
+int main() {
+    printf(&quot;%d\n&quot;, HelloWorld());
+}
+</code></pre>
+<p>You can build it with MSVC as follows:</p>
+<pre><code>cl hello_world.cpp hello_world.dll.lib
+</code></pre>
+<p>The dumpbin tool can be used to further inspect imports and exports.</p>
+<pre><code>&gt; dumpbin /nologo /exports hello_world.dll
+
+Dump of file hello_world.dll
+
+File Type: DLL
+
+  Section contains the following exports for hello_world.dll
+
+    00000000 characteristics
+    FFFFFFFF time date stamp
+        0.00 version
+           1 ordinal base
+           1 number of functions
+           1 number of names
+
+    ordinal hint RVA      name
+
+          1    0 00001000 HelloWorld = HelloWorld
+</code></pre>
+<pre><code>&gt; dumpbin /nologo /imports hello_world.exe
+
+Dump of file hello_world.exe
+
+File Type: EXECUTABLE IMAGE
+
+  Section contains the following imports:
+
+    hello_world.dll
+             140017258 Import Address Table
+             140021200 Import Name Table
+                     0 time date stamp
+                     0 Index of first forwarder reference
+
+                           0 HelloWorld
+</code></pre>
 
                     </main>
 

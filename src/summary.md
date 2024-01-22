@@ -18,3 +18,4 @@
 - [How do I create stock collections for WinRT collection interfaces?](rust-getting-started/how-to-implement-winrt-collection.md)
 - [Understanding the windows-targets crate](rust-getting-started/understanding-windows-targets.md)
 - [Standalone code generation](rust-getting-started/standalone-code-generation.md)
+- [Creating your first DLL in Rust](rust-getting-started/creating-your-first-dll.md)

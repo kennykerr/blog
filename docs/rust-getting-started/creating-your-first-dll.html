@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Calling your first WinRT API - Kenny Kerr</title>
+        <title>Creating your first DLL in Rust - Kenny Kerr</title>
 
 
         <!-- Custom HTML head -->
@@ -88,7 +88,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../index.html">Introduction</a></li><li class="chapter-item expanded affix "><a href="../rust-getting-started/index.html">Getting Started with Rust</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/windows-or-windows-sys.html"><strong aria-hidden="true">1.</strong> Choosing between the windows and windows-sys crates</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/how-are-crates-built.html"><strong aria-hidden="true">2.</strong> How are these crates built?</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/how-to-find-api.html"><strong aria-hidden="true">3.</strong> How do I find a particular API?</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/what-apis-are-included.html"><strong aria-hidden="true">4.</strong> What APIs are included?</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/where-are-the-macros.html"><strong aria-hidden="true">5.</strong> Where's my favorite macro from the Windows SDK?</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/calling-your-first-windows-api.html"><strong aria-hidden="true">6.</strong> Calling your first API with the windows crate</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/calling-your-first-windows-sys-api.html"><strong aria-hidden="true">7.</strong> Calling your first API with the windows-sys crate</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/calling-your-first-com-api.html"><strong aria-hidden="true">8.</strong> Calling your first COM API</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/calling-your-first-winrt-api.html" class="active"><strong aria-hidden="true">9.</strong> Calling your first WinRT API</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/how-to-query-for-com-interface.html"><strong aria-hidden="true">10.</strong> How do I query for a specific COM interface?</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/how-to-implement-com-interface.html"><strong aria-hidden="true">11.</strong> How do I implement an existing COM interface?</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/how-to-implement-winrt-collection.html"><strong aria-hidden="true">12.</strong> How do I create stock collections for WinRT collection interfaces?</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/understanding-windows-targets.html"><strong aria-hidden="true">13.</strong> Understanding the windows-targets crate</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/standalone-code-generation.html"><strong aria-hidden="true">14.</strong> Standalone code generation</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/creating-your-first-dll.html"><strong aria-hidden="true">15.</strong> Creating your first DLL in Rust</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../index.html">Introduction</a></li><li class="chapter-item expanded affix "><a href="../rust-getting-started/index.html">Getting Started with Rust</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/windows-or-windows-sys.html"><strong aria-hidden="true">1.</strong> Choosing between the windows and windows-sys crates</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/how-are-crates-built.html"><strong aria-hidden="true">2.</strong> How are these crates built?</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/how-to-find-api.html"><strong aria-hidden="true">3.</strong> How do I find a particular API?</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/what-apis-are-included.html"><strong aria-hidden="true">4.</strong> What APIs are included?</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/where-are-the-macros.html"><strong aria-hidden="true">5.</strong> Where's my favorite macro from the Windows SDK?</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/calling-your-first-windows-api.html"><strong aria-hidden="true">6.</strong> Calling your first API with the windows crate</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/calling-your-first-windows-sys-api.html"><strong aria-hidden="true">7.</strong> Calling your first API with the windows-sys crate</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/calling-your-first-com-api.html"><strong aria-hidden="true">8.</strong> Calling your first COM API</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/calling-your-first-winrt-api.html"><strong aria-hidden="true">9.</strong> Calling your first WinRT API</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/how-to-query-for-com-interface.html"><strong aria-hidden="true">10.</strong> How do I query for a specific COM interface?</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/how-to-implement-com-interface.html"><strong aria-hidden="true">11.</strong> How do I implement an existing COM interface?</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/how-to-implement-winrt-collection.html"><strong aria-hidden="true">12.</strong> How do I create stock collections for WinRT collection interfaces?</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/understanding-windows-targets.html"><strong aria-hidden="true">13.</strong> Understanding the windows-targets crate</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/standalone-code-generation.html"><strong aria-hidden="true">14.</strong> Standalone code generation</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/creating-your-first-dll.html" class="active"><strong aria-hidden="true">15.</strong> Creating your first DLL in Rust</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -174,59 +174,102 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="calling-your-first-winrt-api"><a class="header" href="#calling-your-first-winrt-api">Calling your first WinRT API</a></h1>
-<p>Windows 8 introduced the Windows Runtime, which at its heart, is just COM with a few more conventions thrown in to make language bindings appear more seamless. The <a href="https://crates.io/crates/windows">windows</a> crate already makes calling COM APIs far more seamless than it is for C++ developers, but WinRT goes further by providing first-class support for modeling things like constructors, events, and class hierarchies. In <a href="calling-your-first-com-api.html">calling your first COM API</a>, we saw that you still had to bootstrap the API with a C-style DLL export before calling COM interface methods. WinRT works the same way but abstracts this away in a generalized manner. </p>
-<p>Let's use a simple example to illustrate. The <code>XmlDocument</code> &quot;class&quot; models an XML document that can be loaded from various sources. The Rust <a href="https://microsoft.github.io/windows-docs-rs/doc/windows/Data/Xml/Dom/struct.XmlDocument.html">docs for the windows crate</a> indicate that this type resides in the <code>Data::Xml::Dom</code> module so we can configure our <code>windows</code> crate dependency as follows:</p>
-<pre><code class="language-toml">[dependencies.windows]
-version = &quot;0.52&quot; 
-features = [
-    &quot;Data_Xml_Dom&quot;,
-]
+                        <h1 id="creating-your-first-dll-in-rust"><a class="header" href="#creating-your-first-dll-in-rust">Creating your first DLL in Rust</a></h1>
+<p>As a systems programming language with similar linkage support to that of C and C++, it is quite straightforward to build a DLL in Rust. Rust does however have it's own notion of libraries that are quite different to that of C and C++, so it's just a matter of finding the right configuration to produce the desired output.</p>
+<p>As with most Rust projects, you can start with Cargo and get started with a basic template but it's so simple we'll just build it by hand here to see what's involved. Let's create a directory structure as follows:</p>
+<pre><code>&gt; hello_world
+  Cargo.toml
+  &gt; src
+    lib.rs
 </code></pre>
-<p>And we can employ a <code>use</code> declaration to make this API a little more accessible. The <code>windows</code> crate's <code>core</code> module just provides a few helpers to make it easier to work with Windows APIs, so we'll include that as well:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>use windows::{core::*, Data::Xml::Dom::XmlDocument}; 
-<span class="boring">}</span></code></pre></pre>
-<p>For this example, I'll just use a simple <code>main</code> function with a <code>Result</code> type from the <code>windows::core</code> module to provide automatic error propagation and simplify the subsequent API calls: </p>
-<pre><pre class="playground"><code class="language-rust">fn main() -&gt; Result&lt;()&gt; {
+<p>Just two directories and two files. There's the <code>hello_world</code> directory that contains the project as a whole. In that directory we have a <code>Cargo.toml</code> file that contains metadata for the project or package, information needed to compile the package:</p>
+<pre><code class="language-toml">[package]
+name = &quot;hello_world&quot;
+edition = &quot;2021&quot;
 
-    Ok(())
-}</code></pre></pre>
-<p>Unlike the previous Win32 and COM examples, you'll notice that this <code>main</code> function does not need an <code>unsafe</code> block since WinRT calls are assumed to be safe thanks to its more constrained type-system.</p>
-<p>To begin, we can simply call the <code>new</code> method to create a new <code>XmlDocument</code> object:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>let doc = XmlDocument::new()?;
-<span class="boring">}</span></code></pre></pre>
-<p>This looks a lot more like an idiomatic Rust type than your typical COM API, but under the hood a similar mechanism is used to instantiate the <code>XmlDocument</code> implementation via a DLL export. We can then call the <code>LoadXml</code> method to test it out. There are various other options for loading XML from different sources, which you can <a href="https://learn.microsoft.com/en-us/uwp/api/windows.data.xml.dom.xmldocument?view=winrt-22621">read about in the official documentation</a> or from the Rust docs for the <code>XmlDocument</code> API. The <code>windows</code> crate also provides the handy <code>h!</code> macro for creating an <code>HSTRING</code>, the string type used by WinRT APIs:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>doc.LoadXml(h!(&quot;&lt;html&gt;hello world&lt;/html&gt;&quot;))?;
-<span class="boring">}</span></code></pre></pre>
-<p>And just like that, we have a fully-formed Xml document that we can inspect. For this example, let's just grab the document element and then do some basic queries as follows:</p>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>let root = doc.DocumentElement()?;
-assert!(root.NodeName()? == &quot;html&quot;);
-println!(&quot;{}&quot;, root.InnerText()?);
-<span class="boring">}</span></code></pre></pre>
-<p>First we assert that the element's name is in fact &quot;html&quot; and then print out the element's inner text. As with the previous COM example, those methods all invoke virtual functions through COM interfaces, but the <code>windows</code> crate makes it very simple to make such calls directly from Rust. And that's it. Running the sample should print something like this:</p>
-<pre><code>hello world
+[lib]
+crate-type = [&quot;cdylib&quot;]
 </code></pre>
-<p>Here's the <a href="https://github.com/microsoft/windows-rs/blob/master/crates/samples/windows/xml/src/main.rs">full sample for reference</a>.</p>
+<p>At a minimum, the <code>[package]</code> section includes the name and Rust edition your package is compiled with.</p>
+<p>Rust-only libraries don't generally include a <code>[lib]</code>  section. This is necessary when you need to specifically control how the project will be used and linked. In this case, we're using 'cdylib' that represents a dynamic system library and maps to a DLL on Windows.</p>
+<p>The <code>src</code> sub directory contains the <code>lib.rs</code> Rust source file where we can add any functions that we'd like to export from the DLL. Here's a simple example:</p>
+<pre><code>#[no_mangle]
+extern &quot;system&quot; fn HelloWorld() -&gt; i32 {
+    123
+}
+</code></pre>
+<p>The <code>[no_mangle]</code> attribute just tells the compiler to disable any name mangling and use the function name verbatim as the exported identifier. The <code>extern &quot;system&quot;</code> function qualifier indicates the ABI or calling convention expected for the function. The &quot;system&quot; string represents the system-specific calling convention which generally maps to &quot;stdcall&quot; on Windows. </p>
+<p>And that's it! You can now build the package and it will produce a DLL:</p>
+<pre><code>&gt; cargo build -p hello_world
+</code></pre>
+<p>Cargo will drop the resulting binaries in the target directory where you can then use them from any other programming language:</p>
+<pre><code>&gt; dir /b target\debug\hello_world.*
+hello_world.d
+hello_world.dll
+hello_world.dll.exp
+hello_world.dll.lib
+hello_world.pdb
+</code></pre>
+<p>Here's a simple example in C++:</p>
+<pre><code class="language-C++">#include &lt;stdint.h&gt;
+#include &lt;stdio.h&gt;
+
+extern &quot;C&quot; {
+    int32_t __stdcall HelloWorld();
+}
+
+int main() {
+    printf(&quot;%d\n&quot;, HelloWorld());
+}
+</code></pre>
+<p>You can build it with MSVC as follows:</p>
+<pre><code>cl hello_world.cpp hello_world.dll.lib
+</code></pre>
+<p>The dumpbin tool can be used to further inspect imports and exports.</p>
+<pre><code>&gt; dumpbin /nologo /exports hello_world.dll
+
+Dump of file hello_world.dll
+
+File Type: DLL
+
+  Section contains the following exports for hello_world.dll
+
+    00000000 characteristics
+    FFFFFFFF time date stamp
+        0.00 version
+           1 ordinal base
+           1 number of functions
+           1 number of names
+
+    ordinal hint RVA      name
+
+          1    0 00001000 HelloWorld = HelloWorld
+</code></pre>
+<pre><code>&gt; dumpbin /nologo /imports hello_world.exe
+
+Dump of file hello_world.exe
+
+File Type: EXECUTABLE IMAGE
+
+  Section contains the following imports:
+
+    hello_world.dll
+             140017258 Import Address Table
+             140021200 Import Name Table
+                     0 time date stamp
+                     0 Index of first forwarder reference
+
+                           0 HelloWorld
+</code></pre>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="../rust-getting-started/calling-your-first-com-api.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../rust-getting-started/standalone-code-generation.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next prefetch" href="../rust-getting-started/how-to-query-for-com-interface.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                                <i class="fa fa-angle-right"></i>
-                            </a>
 
                         <div style="clear: both"></div>
                     </nav>
@@ -234,13 +277,10 @@ println!(&quot;{}&quot;, root.InnerText()?);
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="../rust-getting-started/calling-your-first-com-api.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../rust-getting-started/standalone-code-generation.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next prefetch" href="../rust-getting-started/how-to-query-for-com-interface.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                        <i class="fa fa-angle-right"></i>
-                    </a>
             </nav>
 
         </div>
