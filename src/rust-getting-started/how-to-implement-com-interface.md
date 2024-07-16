@@ -33,7 +33,7 @@ The `implement` macro will provide the necessary implementation for the `IUnknow
 The implementation itself is defined by a trait that follows the `<interface name>_Impl` pattern and its up to us to implement it for our implementation as follows:
 
 ```rust
-impl IPersist_Impl for Persist {
+impl IPersist_Impl for Persist_Impl {
     fn GetClassID(&self) -> Result<GUID> {
         Ok(self.0)
     }
