@@ -113,10 +113,9 @@ fn get_computer_name_two_step() -> String {
     }
 
     // buff len now has the length of the string (in UTF-16 characters)
-    // the function would like to write. This does *not* include the
+    // the function would like to write. This *does include* the
     // null terminator. Let's create a vector buffer and feed that to the function.
-
-    let mut buffer = Vec::<u16>::with_capacity(buff_len as usize + 1);
+    let mut buffer = Vec::<u16>::with_capacity(buff_len as usize);
 
     unsafe {
         WindowsProgramming::GetComputerNameW(
@@ -124,16 +123,27 @@ fn get_computer_name_two_step() -> String {
             &mut buff_len).unwrap();
 
         // set the vector length
+        // buff_len now includes the size, which *does not include* the null terminator.
         buffer.set_len(buff_len as usize + 1);
     }
 
     // we can now convert this to a valid Rust string
-    String::from_utf16_lossy(&buffer)
+    // omitting the null terminator
+    String::from_utf16_lossy(&buffer[..buff_len as usize])
 
 }
 ```
 
-This works, but we can do better. Computer names can only be up to `MAX_COMPUTERNAME_LENGTH` which is a meager 16 characters. We can avoid
+It's worth calling out how the length parameter works. For GetComputerNameW:
+  - On input, it represents the size of the buffer *including the null terminator* in wchar. 
+  - If the function returns a buffer overflow, the length parameter returned is how
+    large a buffer it needs *including the null terminator* in wchars.
+  - If the function successfully wrote to the buffer, the length is the number
+    of wchars written *not including the null terminator.*
+
+[This behavior is documented in the function's documentation](https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-getcomputernamew) - when using the Windows API, be careful and check what the function expectes with respect to null terminators.
+
+Regardless, this does work, but we can do better. Computer names can only be up to `MAX_COMPUTERNAME_LENGTH` which is a meager 16 characters. We can avoid
 a heap allocation here and just use arrays, since we know our buffer 
 length at compile time.
 
