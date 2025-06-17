@@ -124,12 +124,14 @@ fn get_computer_name_two_step() -> String {
 
         // set the vector length
         // buff_len now includes the size, which *does not include* the null terminator.
-        buffer.set_len(buff_len as usize + 1);
+        // let's set the length to just before the terminator so we don't have to worry
+        // about it in later conversions.
+        buffer.set_len(buff_len);
     }
 
     // we can now convert this to a valid Rust string
     // omitting the null terminator
-    String::from_utf16_lossy(&buffer[..buff_len as usize])
+    String::from_utf16_lossy(&buffer)
 
 }
 ```
@@ -195,5 +197,42 @@ fn get_computer_name_hstring_builder() -> String {
 
     // and we can now return a rust string from the HSTRING:
     buffer.to_string_lossy()
+}
+```
+
+If you need to work with UTF-16 strings directly, consider using the `widestring` crate, which is UTF-16 aware. This will enable you to push/pop/append elements without having to convert the string to a native rust UTF-8 string. For completeness, here's an example of returning a widestring, and appending some exclaimation marks. 
+
+```rust
+fn get_computer_name_widestrings() -> Result<Utf16String, Utf16Error> {
+    // for this example, we'll just use an array again
+
+    let mut name = [0u16; MAX_COMPUTERNAME_LENGTH as usize + 1];
+    let mut len = name.len() as u32;
+
+    unsafe {
+        GetComputerNameW(
+            Some(PWSTR(name.as_mut_ptr())), 
+            &mut len)
+            .unwrap();
+    }
+
+    // we can make a UTF16Str slice directly from the buffer,
+    // without needing to do any copy. This will error if the buffer
+    // isn't valid UTF-16. 
+    let wstr = Utf16Str::from_slice(&name[..len as usize])?;
+
+    // this can be displayed as is.
+    println!("Computer name is {}", wstr);
+
+    // we can also transfer it into owned string, which can
+    // be appended or modified. 
+    let mut wstring = Utf16String::from(wstr);
+
+    // let's append another string. We'll use a macro to avoid
+    // any UTF conversion at runtime. 
+    wstring = wstring + utf16str!("!!!");
+
+    Ok(wstring)
+
 }
 ```
