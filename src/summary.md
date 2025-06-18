@@ -20,4 +20,4 @@
 - [Standalone code generation](rust-getting-started/standalone-code-generation.md)
 - [Creating your first DLL in Rust](rust-getting-started/creating-your-first-dll.md)
 - [Implement a traditional Win32-style API](rust-getting-started/implement-win32-api.md)
-- [Working with Strings in the Windows Crate](rust-getting-started/string-tutorial.md)
+- [Working with strings in the windows crate](rust-getting-started/string-tutorial.md)
