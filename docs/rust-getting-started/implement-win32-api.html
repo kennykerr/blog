@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html lang="en" class="light" dir="ltr">
+<html lang="en" class="light sidebar-visible" dir="ltr">
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
@@ -24,26 +24,40 @@
         <link rel="stylesheet" href="../fonts/fonts.css">
 
         <!-- Highlight.js Stylesheets -->
-        <link rel="stylesheet" href="../highlight.css">
-        <link rel="stylesheet" href="../tomorrow-night.css">
-        <link rel="stylesheet" href="../ayu-highlight.css">
+        <link rel="stylesheet" id="highlight-css" href="../highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="../tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="../ayu-highlight.css">
 
         <!-- Custom theme stylesheets -->
 
-    </head>
-    <body class="sidebar-visible no-js">
-    <div id="body-container">
-        <!-- Provide site root to javascript -->
-        <script>
-            var path_to_root = "../";
-            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
-        </script>
 
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "../";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="../toc.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="body-container">
         <!-- Work around some values being stored in localStorage wrapped in quotes -->
         <script>
             try {
-                var theme = localStorage.getItem('mdbook-theme');
-                var sidebar = localStorage.getItem('mdbook-sidebar');
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
 
                 if (theme.startsWith('"') && theme.endsWith('"')) {
                     localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
@@ -57,24 +71,22 @@
 
         <!-- Set the theme before any content is loaded, prevents flash -->
         <script>
-            var theme;
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
             try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
             if (theme === null || theme === undefined) { theme = default_theme; }
-            var html = document.querySelector('html');
+            const html = document.documentElement;
             html.classList.remove('light')
             html.classList.add(theme);
-            var body = document.querySelector('body');
-            body.classList.remove('no-js')
-            body.classList.add('js');
+            html.classList.add("js");
         </script>
 
         <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
 
         <!-- Hide / unhide sidebar before it is displayed -->
         <script>
-            var body = document.querySelector('body');
-            var sidebar = null;
-            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
             if (document.body.clientWidth >= 1080) {
                 try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
                 sidebar = sidebar || 'visible';
@@ -82,43 +94,25 @@
                 sidebar = 'hidden';
             }
             sidebar_toggle.checked = sidebar === 'visible';
-            body.classList.remove('sidebar-visible');
-            body.classList.add("sidebar-" + sidebar);
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
-            <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../index.html">Introduction</a></li><li class="chapter-item expanded affix "><a href="../rust-getting-started/index.html">Getting Started with Rust</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/windows-or-windows-sys.html"><strong aria-hidden="true">1.</strong> Choosing between the windows and windows-sys crates</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/how-are-crates-built.html"><strong aria-hidden="true">2.</strong> How are these crates built?</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/how-to-find-api.html"><strong aria-hidden="true">3.</strong> How do I find a particular API?</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/what-apis-are-included.html"><strong aria-hidden="true">4.</strong> What APIs are included?</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/where-are-the-macros.html"><strong aria-hidden="true">5.</strong> Where's my favorite macro from the Windows SDK?</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/calling-your-first-windows-api.html"><strong aria-hidden="true">6.</strong> Calling your first API with the windows crate</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/calling-your-first-windows-sys-api.html"><strong aria-hidden="true">7.</strong> Calling your first API with the windows-sys crate</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/calling-your-first-com-api.html"><strong aria-hidden="true">8.</strong> Calling your first COM API</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/calling-your-first-winrt-api.html"><strong aria-hidden="true">9.</strong> Calling your first WinRT API</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/how-to-query-for-com-interface.html"><strong aria-hidden="true">10.</strong> How do I query for a specific COM interface?</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/how-to-implement-com-interface.html"><strong aria-hidden="true">11.</strong> How do I implement an existing COM interface?</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/how-to-implement-winrt-collection.html"><strong aria-hidden="true">12.</strong> How do I create stock collections for WinRT collection interfaces?</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/understanding-windows-targets.html"><strong aria-hidden="true">13.</strong> Understanding the windows-targets crate</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/standalone-code-generation.html"><strong aria-hidden="true">14.</strong> Standalone code generation</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/creating-your-first-dll.html"><strong aria-hidden="true">15.</strong> Creating your first DLL in Rust</a></li><li class="chapter-item expanded "><a href="../rust-getting-started/implement-win32-api.html" class="active"><strong aria-hidden="true">16.</strong> Implement a traditional Win32-style API</a></li></ol>
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="../toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
             </div>
-            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
-
-        <!-- Track and set sidebar scroll position -->
-        <script>
-            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
-            sidebarScrollbox.addEventListener('click', function(e) {
-                if (e.target.tagName === 'A') {
-                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
-                }
-            }, { passive: true });
-            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
-            sessionStorage.removeItem('sidebar-scroll');
-            if (sidebarScrollTop) {
-                // preserve sidebar scroll position when navigating via links within sidebar
-                sidebarScrollbox.scrollTop = sidebarScrollTop;
-            } else {
-                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
-                var activeSection = document.querySelector('#sidebar .active');
-                if (activeSection) {
-                    activeSection.scrollIntoView({ block: 'center' });
-                }
-            }
-        </script>
 
         <div id="page-wrapper" class="page-wrapper">
 
             <div class="page">
-                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar-hover-placeholder"></div>
                 <div id="menu-bar" class="menu-bar sticky">
                     <div class="left-buttons">
                         <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
@@ -128,13 +122,14 @@
                             <i class="fa fa-paint-brush"></i>
                         </button>
                         <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
                         </ul>
-                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
                             <i class="fa fa-search"></i>
                         </button>
                     </div>
@@ -183,28 +178,28 @@ HRESULT __stdcall ValidateJson(uintptr_t handle, char const* value, size_t value
 
 void __stdcall CloseJsonValidator(uintptr_t handle);
 </code></pre>
-<p>The <code>CreateJsonValidator</code> function should compile the schema and make it available through the returned <code>handle</code>. </p>
+<p>The <code>CreateJsonValidator</code> function should compile the schema and make it available through the returned <code>handle</code>.</p>
 <p>The handle can then be passed to the <code>ValidateJson</code> function to perform the validation. The function can optionally return a sanitized version of the JSON value.</p>
-<p>The JSON validator handle can later be freed using the <code>CloseJsonValidator</code> function, causing any memory occupied by the validator &quot;object&quot; to be freed.</p>
+<p>The JSON validator handle can later be freed using the <code>CloseJsonValidator</code> function, causing any memory occupied by the validator "object" to be freed.</p>
 <p>Both creation and validation can fail, so those functions return an <code>HRESULT</code>, with rich error information being available via the <code>GetErrorInfo</code> function.</p>
 <p>Let's use the <code>windows</code> crate for basic Windows error handling and type support. The popular <code>serde_json</code> crate will be used for parsing JSON strings. Unfortunately, it doesn't provide schema validation. A quick online search reveals the <code>jsonschema</code> crate seems to be the main or only game in town. It will do for this example. The focus here is not really on the particular implementation as much as the process of building such an API in Rust generally.</p>
 <p>Given these dependencies and what we learned about creating a DLL in Rust, here's what the project's <code>Cargo.toml</code> file should look like:</p>
 <pre><code class="language-toml">[package]
-name = &quot;json_validator&quot;
-edition = &quot;2021&quot;
+name = "json_validator"
+edition = "2021"
 
 [lib]
-crate-type = [&quot;cdylib&quot;]
+crate-type = ["cdylib"]
 
 [dependencies]
-jsonschema = &quot;0.17&quot;
-serde_json = &quot;1.0&quot;
+jsonschema = "0.17"
+serde_json = "1.0"
 
 [dependencies.windows]
-version = &quot;0.52&quot;
+version = "0.52"
 features = [
-    &quot;Win32_Foundation&quot;,
-    &quot;Win32_System_Com&quot;,
+    "Win32_Foundation",
+    "Win32_System_Com",
 ]
 </code></pre>
 <p>We can employ a <code>use</code> declaration to make things a little easier for ourselves:</p>
@@ -217,7 +212,7 @@ use windows::{core::*, Win32::Foundation::*, Win32::System::Com::*};
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>#[no_mangle]
-unsafe extern &quot;system&quot; fn CreateJsonValidator(
+unsafe extern "system" fn CreateJsonValidator(
     schema: *const u8,
     schema_len: usize,
     handle: *mut usize,
@@ -249,7 +244,7 @@ unsafe extern &quot;system&quot; fn CreateJsonValidator(
     let value =
         std::str::from_utf8(value).map_err(|_| Error::from(ERROR_NO_UNICODE_TRANSLATION))?;
 
-    serde_json::from_str(value).map_err(|error| Error::new(E_INVALIDARG, format!(&quot;{error}&quot;).into()))
+    serde_json::from_str(value).map_err(|error| Error::new(E_INVALIDARG, format!("{error}").into()))
 }
 <span class="boring">}</span></code></pre></pre>
 <p>The <code>json_from_raw_parts</code> function starts by checking that the pointer to a UTF-8 string is not null, return <code>E_POINTER</code> in such cases. We can then turn the pointer and length into a Rust slice and from there a string slice, ensuring that it is in fact a valid UTF-8 string. Finally, we call out to <code>serde_json</code> to turn the string into a JSON value for further processing.</p>
@@ -271,12 +266,12 @@ unsafe extern &quot;system&quot; fn CreateJsonValidator(
     Ok(())
 }
 <span class="boring">}</span></code></pre></pre>
-<p>The JSON value, in this case the JSON schema, is passed to <code>JSONSchema::compile</code> to produce the compiled representation. While the value is known to be JSON at this point, it may not in fact be a valid JSON schema. In such cases, we'll return <code>E_INVALIDARG</code> and include the error message from the JSON schema compiler to aid in debugging. Finally, provided the handle pointer is not null, we can go ahead and box the compiled representation and return it as the &quot;handle&quot;.</p>
-<p>Now let's move on to the <code>CloseJsonValidator</code> function since it's closely related to the boxing code above. Boxing just means to move the value on to the heap. The <code>CloseJsonValidator</code> function therefore needs to &quot;drop&quot; the object and free that heap allocation:</p>
+<p>The JSON value, in this case the JSON schema, is passed to <code>JSONSchema::compile</code> to produce the compiled representation. While the value is known to be JSON at this point, it may not in fact be a valid JSON schema. In such cases, we'll return <code>E_INVALIDARG</code> and include the error message from the JSON schema compiler to aid in debugging. Finally, provided the handle pointer is not null, we can go ahead and box the compiled representation and return it as the "handle".</p>
+<p>Now let's move on to the <code>CloseJsonValidator</code> function since it's closely related to the boxing code above. Boxing just means to move the value on to the heap. The <code>CloseJsonValidator</code> function therefore needs to "drop" the object and free that heap allocation:</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>#[no_mangle]
-unsafe extern &quot;system&quot; fn CloseJsonValidator(handle: usize) {
+unsafe extern "system" fn CloseJsonValidator(handle: usize) {
     if handle != 0 {
         _ = Box::from_raw(handle as *mut JSONSchema);
     }
@@ -287,7 +282,7 @@ unsafe extern &quot;system&quot; fn CloseJsonValidator(handle: usize) {
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>#[no_mangle]
-unsafe extern &quot;system&quot; fn ValidateJson(
+unsafe extern "system" fn ValidateJson(
     handle: usize,
     value: *const u8,
     value_len: usize,
@@ -378,6 +373,9 @@ Err(Error::new(E_INVALIDARG, message.into()))
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
+                            <a rel="next prefetch" href="../rust-getting-started/string-tutorial.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
 
                         <div style="clear: both"></div>
                     </nav>
@@ -389,6 +387,9 @@ Err(Error::new(E_INVALIDARG, message.into()))
                         <i class="fa fa-angle-left"></i>
                     </a>
 
+                    <a rel="next prefetch" href="../rust-getting-started/string-tutorial.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
             </nav>
 
         </div>
